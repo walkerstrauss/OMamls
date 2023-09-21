@@ -1,4 +1,4 @@
-# OMaml
+# OMamls
 
 <p>Gregor Guerrier (gg429)</p>
 <p>Walker Strauss (was236)</p>
