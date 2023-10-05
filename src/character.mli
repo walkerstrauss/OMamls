@@ -14,7 +14,7 @@ type character = {
     level : int;
 }
 
-val create : character -> character
+val create : string -> major -> character
 
 val rename : character -> character
 
