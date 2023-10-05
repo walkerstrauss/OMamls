@@ -18,4 +18,4 @@ val create : string -> major -> character
 
 val rename : string -> character -> character
 
-val change_hp : character -> character
+val change_hp : int -> character -> character
