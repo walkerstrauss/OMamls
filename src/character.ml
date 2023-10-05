@@ -1,3 +1,5 @@
+open Item
+
 type major = CS | ECE | MechE | ChemE | CivilE | IS
 
 type character = {
@@ -7,7 +9,7 @@ type character = {
   battle_power : int;
   skills : int list;
   abilities : int list;
-  inventory : int list;
+  inventory : item list;
   experience : int;
   level : int;
 }
