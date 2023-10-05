@@ -16,6 +16,6 @@ type character = {
 
 val create : string -> major -> character
 
-val rename : character -> character
+val rename : string -> character -> character
 
 val change_hp : character -> character
