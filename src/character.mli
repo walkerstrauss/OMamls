@@ -52,4 +52,4 @@ val add_ability : ability -> character -> character
 (**Overwrite the second inputted ability with the first inputted ability
     Returns the character with the overwritten the ability list
     Returns an error if the second inputted ability is not in the characters repertoire*)
-val overwrite_ability : ability -> ability -> character
+val overwrite_ability : ability -> ability -> character -> character

@@ -60,11 +60,11 @@ let add_ability ability character =
                                                       (List.filter 
                                                         (fun x -> x = None) 
                                                         character.abilities)}
-                                                        
+
 (**Overwrite an ability in the character's repertoire of abilities*)
 let overwrite_ability ability overwrite character =
-  match List.find_opt (fun x -> x = overwrite) character.abilities with
-  | Some _ -> {character with abilities = (List.find_all (fun x -> x != overwrite) character.abilities) @ [Some ability]}
+  match List.find_opt (fun x -> x = Some overwrite) character.abilities with
+  | Some _ -> {character with abilities = (List.find_all (fun x -> x != Some overwrite) character.abilities) @ [Some ability]}
   | None -> failwith "This Ability could not be found!"
 
 
