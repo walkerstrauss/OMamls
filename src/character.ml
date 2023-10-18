@@ -32,6 +32,41 @@ let create name major = {
 (**Rename the character *)
 let rename name character = {character with name = name}
 
+(**Generate a random character*)
+let generate (first, last) majors skills abilities items difficulty = 
+  let name = List.nth first (Random.full_int (List.length first)) ^ " " ^ List.nth last (Random.full_int (List.length last)) in
+  let major = List.nth majors (Random.full_int (List.length majors)) in
+  let skills = let rec skill_select s acc =
+    if List.length s = 0 then acc else 
+      match Random.full_int (12 / difficulty) with
+      | 1 -> skill_select (List.tl s) acc @ [(List.hd s, 0)]
+      | _ -> skill_select (List.tl s) acc
+    in skill_select skills [] in
+  let abilities = let rec ability_select a acc =
+    if List.length acc = 4 then acc else
+      if List.length a = 0 then acc else
+        match Random.full_int (12 / difficulty)  with
+        | 1 -> ability_select (List.tl a) acc @ [Some (List.hd a)]
+        | _ -> ability_select (List.tl a @ [List.hd a]) acc
+      in ability_select abilities [] in
+  let inventory = let rec item_select i acc =
+    if List.length i = 0 then acc else
+      match Random.full_int (12 / difficulty) with
+      | 1 -> item_select (List.tl i) acc @ [List.hd i]
+      | _ -> item_select (List.tl i) acc
+    in item_select items [] in
+    {
+      name = name;
+      health = 100;
+      major = major;
+      battle_power = 0;
+      skills = skills;
+      abilities = abilities;
+      inventory = inventory;
+      experience = 0;
+      status = Alive;
+    }
+
 (**Change the health of the character and the status of being dead or alive*)
 let change_hp hp character =  {character with health = character.health + hp; status = if hp > 0 then Alive else Dead}
 
@@ -74,8 +109,3 @@ let update_skill sp skill character =
 (**Update the experience of a character by adding xp to the characters experience*)
 let update_experience xp character =
   {character with experience = character.experience + xp}
-  
-
-
-
-
