@@ -15,7 +15,6 @@ type character = {
     skills : int list;
     abilities : ability option list;
     inventory : item list;
-    experience : int;
     status : status;
 }
 
@@ -64,7 +63,3 @@ val overwrite_ability : ability -> ability -> character -> character
 (**Updates a the given skill by the given amount
     Returns the character with the updated skill level or with a new skill at the given skill level*)
 val update_skill : int -> string -> character -> character
-
-(**Updates the character by the given amount
-    Returns the character with the updated experience level*)
-val update_experience : int -> character -> character

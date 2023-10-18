@@ -12,7 +12,6 @@ type character = {
   skills : (string * int) list;
   abilities : ability option list;
   inventory : item list;
-  experience : int;
   status : status;
 }
 
@@ -25,7 +24,6 @@ let create name major = {
   skills = []; 
   abilities = [None; None; None; None]; 
   inventory = []; 
-  experience = 0; 
   status = Alive;
   }
 
@@ -34,7 +32,9 @@ let rename name character = {character with name = name}
 
 (**Generate a random character*)
 let generate (first, last) majors skills abilities items difficulty = 
-  let name = List.nth first (Random.full_int (List.length first)) ^ " " ^ List.nth last (Random.full_int (List.length last)) in
+  let name = List.nth first (Random.full_int (List.length first)) ^
+   " " ^ 
+   List.nth last (Random.full_int (List.length last)) in
   let major = List.nth majors (Random.full_int (List.length majors)) in
   let skills = let rec skill_select s acc =
     if List.length s = 0 then acc else 
@@ -63,7 +63,6 @@ let generate (first, last) majors skills abilities items difficulty =
       skills = skills;
       abilities = abilities;
       inventory = inventory;
-      experience = 0;
       status = Alive;
     }
 
@@ -105,7 +104,3 @@ let update_skill sp skill character =
   match List.find_opt (fun x -> let y, _ = x in y = skill) character.skills with
   | Some (name, level) -> {character with skills = (name, level + sp) :: List.filter (fun x -> let y,_ = x in y <> skill) character.skills}
   | None -> {character with skills = (skill, sp) :: character.skills}
-
-(**Update the experience of a character by adding xp to the characters experience*)
-let update_experience xp character =
-  {character with experience = character.experience + xp}
