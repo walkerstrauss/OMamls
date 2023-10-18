@@ -24,7 +24,7 @@ let create name major = {
   major = major; 
   battle_power = 0; 
   skills = []; 
-  abilities = []; 
+  abilities = [None; None; None; None]; 
   inventory = []; 
   experience = 0; 
   level = 0;
@@ -48,5 +48,23 @@ let remove_item item character =
   match List.find_opt (fun x -> x = item) character.inventory with
   | Some x -> (Some x, {character with inventory = List.find_all (fun x -> x <> x) character.inventory})
   | None -> (None, {character with inventory = character.inventory})
+
+(**Add an ability to the character's repertoire of abilities*)
+let add_ability ability character = 
+  match List.length (List.find_all (fun x -> x != None) character.abilities) with
+  | len when len >= 4 -> failwith "Must Overwrite an Ability"
+  | _ -> {character with abilities = 
+            List.find_all 
+              (fun x -> x != None) 
+              character.abilities @ [Some ability] @ List.tl 
+                                                      (List.filter 
+                                                        (fun x -> x = None) 
+                                                        character.abilities)}
+                                                        
+(**Overwrite an ability in the character's repertoire of abilities*)
+let overwrite_ability ability overwrite character =
+  match List.find_opt (fun x -> x = overwrite) character.abilities with
+  | Some _ -> {character with abilities = (List.find_all (fun x -> x != overwrite) character.abilities) @ [Some ability]}
+  | None -> failwith "This Ability could not be found!"
 
 

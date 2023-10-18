@@ -34,7 +34,7 @@ val change_hp : int -> character -> character
     Returns the character with the changed major*)
 val change_maj : major -> character -> character
 
-(**Add an the inputted item to the character's inventory
+(**Add the inputted item to the character's inventory
     Returns the character with the item added to the front of the inventory list*)
 val add_item : item -> character -> character
 
@@ -43,3 +43,13 @@ val add_item : item -> character -> character
     and returns None when the item is not in the inventory, and the character with
     its inventory appropriately altered*)
 val remove_item : item -> character -> item option * character
+
+(**Add the inputted ability to the character
+    Returns the character with the updated ability list
+    Returns an error if the ability list is full*)
+val add_ability : ability -> character -> character
+
+(**Overwrite the second inputted ability with the first inputted ability
+    Returns the character with the overwritten the ability list
+    Returns an error if the second inputted ability is not in the characters repertoire*)
+val overwrite_ability : ability -> ability -> character
