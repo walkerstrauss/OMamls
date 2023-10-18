@@ -4,6 +4,14 @@ type ability = {
   effect : int
 }
 
+let sleep_through_class = { name = "Sleep through class"; effect = 400}
+
+let throw_item = { name = "Throw item"; effect = 100 }
+
+let meditate = { name = "Meditate"; effect = 300}
+
+let sign_up_for_chat_gpt = {name = "Sign up for Chat GPT"; effect = 500}
+
 (* let change_major (char: character) (maj : major) : character = 
   if char.major = maj then char else {
   name = char.name;

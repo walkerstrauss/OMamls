@@ -4,6 +4,14 @@ type ability = {
   effect : int
 }
 
+val sleep_through_class : ability
+
+val throw_item : ability
+
+val meditate : ability
+
+val sign_up_for_chat_gpt : ability
+
 (* val sleep_through_class : ability
 
 val empty_inventory : ability
