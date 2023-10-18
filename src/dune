@@ -1,2 +1,3 @@
 (library
- (name omamls))
+ (name omamls)
+ (public_name OMamls))
