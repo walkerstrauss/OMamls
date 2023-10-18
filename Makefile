@@ -16,6 +16,9 @@ utop:
 test:
 	OCAMLRUNPARAM=b dune exec test/main.exe
 
+play: 
+	OCAMLRUNPARAM=b dune exec src/main.exe
+
 check:
 	@bash check.sh
 
