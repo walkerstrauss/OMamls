@@ -1,10 +1,12 @@
 open Item
 open Ability
 
+(**The possible majors to choose from*)
 type major = CS | ECE | MechE | ChemE | CivilE | IS
+(**The current status of the character*)
 type status = Alive | Dead
 
-
+(**The type of the character*)
 type character = {
     name : string;
     health : int;
@@ -14,7 +16,6 @@ type character = {
     abilities : ability option list;
     inventory : item list;
     experience : int;
-    level : int;
     status : status;
 }
 
@@ -53,3 +54,11 @@ val add_ability : ability -> character -> character
     Returns the character with the overwritten the ability list
     Returns an error if the second inputted ability is not in the characters repertoire*)
 val overwrite_ability : ability -> ability -> character -> character
+
+(**Updates a the given skill by the given amount
+    Returns the character with the updated skill level or with a new skill at the given skill level*)
+val update_skill : int -> string -> character -> character
+
+(**Updates the character by the given amount
+    Returns the character with the updated experience level*)
+val update_experience : int -> character -> character

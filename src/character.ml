@@ -9,11 +9,10 @@ type character = {
   health : int;
   major : major;
   battle_power : int;
-  skills : int list;
+  skills : (string * int) list;
   abilities : ability option list;
   inventory : item list;
   experience : int;
-  level : int;
   status : status;
 }
 
@@ -27,7 +26,6 @@ let create name major = {
   abilities = [None; None; None; None]; 
   inventory = []; 
   experience = 0; 
-  level = 0;
   status = Alive;
   }
 
@@ -66,5 +64,18 @@ let overwrite_ability ability overwrite character =
   match List.find_opt (fun x -> x = Some overwrite) character.abilities with
   | Some _ -> {character with abilities = (List.find_all (fun x -> x != Some overwrite) character.abilities) @ [Some ability]}
   | None -> failwith "This Ability could not be found!"
+
+(**Update a skill by adding sp to it or create a skill with sp as the initial value*)
+let update_skill sp skill character =
+  match List.find_opt (fun x -> let y, _ = x in y = skill) character.skills with
+  | Some (name, level) -> {character with skills = (name, level + sp) :: List.filter (fun x -> let y,_ = x in y <> skill) character.skills}
+  | None -> {character with skills = (skill, sp) :: character.skills}
+
+(**Update the experience of a character by adding xp to the characters experience*)
+let update_experience xp character =
+  {character with experience = character.experience + xp}
+  
+
+
 
 
