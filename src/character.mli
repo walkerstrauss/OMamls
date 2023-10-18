@@ -11,7 +11,7 @@ type character = {
     major : major;
     battle_power : int;
     skills : int list;
-    abilities : ability list;
+    abilities : ability option list;
     inventory : item list;
     experience : int;
     level : int;
