@@ -1,12 +1,10 @@
-open Character
-open Item
 
 type ability = {
   name : string;
-  effect : character -> character
+  effect : int
 }
 
-let change_major (char: character) (maj : major) : character = 
+(* let change_major (char: character) (maj : major) : character = 
   if char.major = maj then char else {
   name = char.name;
   health = char.health;
@@ -101,4 +99,4 @@ let study_for_exam : ability = {
     level = char.level;
   })
 }
-
+ *)

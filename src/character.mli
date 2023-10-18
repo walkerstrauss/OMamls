@@ -1,4 +1,5 @@
 open Item
+open Ability
 
 type major = CS | ECE | MechE | ChemE | CivilE | IS
 
