@@ -5,10 +5,8 @@ TurnSkip with the probability that it skips a turn
 Debuff with the skill option and percentage of skill loss
 Buff with the skill option and percentage of skill gain
 *)
-type effect_type = Damage of int * int | TurnSkip of int * int | Debuff of (string option * int) * int | Buff of (string option * int) * int
+type effect_type = Damage of int | TurnSkip of int | Debuff of (string option * int)| Buff of (string option * int) | Steal of int
 
-(**Affected determines who is being affected by an ability*)
-type affected = User | Opposing
 
 (**Record of the effect with its name
     its description is what will be said when used
@@ -16,7 +14,7 @@ type affected = User | Opposing
 type effect = {
     name : string;
     description : string;
-    effect : effect_type list;
+    effect : (effect_type * int) list;
 }
 
 (**Record of the ability with its name,
@@ -25,8 +23,7 @@ type effect = {
 type ability = {
   name : string;
   required : (string * int) list;
-  affects : affected;
-  effect : effect;
+  effect : effect * effect;
 }
 
 (**List of possible abilities a player can have*)

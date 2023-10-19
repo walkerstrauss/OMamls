@@ -1,7 +1,6 @@
 open Omamls
 open Character
-
-let first_names = 
+(*let first_names = 
   [
     "Walker";
     "Talia";
@@ -28,6 +27,7 @@ let first_names =
     "Stewart";
     "Smith"
   ]
+*)
 (********** command line interface **********)
 let () = 
   print_endline "\n\nWelcome to the Cornell RPG.\n";
