@@ -12,7 +12,7 @@ type character = {
     health : int;
     major : major;
     battle_power : int;
-    skills : int list;
+    skills : (string * int) list;
     abilities : ability option list;
     inventory : item list;
     status : status;
