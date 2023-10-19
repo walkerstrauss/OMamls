@@ -5,7 +5,7 @@ TurnSkip with the probability that it skips a turn
 Debuff with the skill option and percentage of skill loss
 Buff with the skill option and percentage of skill gain
 *)
-type effect_type = Damage of int | TurnSkip of int | Debuff of (string option * int)| Buff of (string option * int) | Steal of int
+type effect_type = Damage of int| TurnSkip of int | Debuff of (string list option * int) | Buff of (string list option * int) | AddItem | RemoveItem
 
 
 (**Record of the effect with its name
@@ -23,7 +23,7 @@ type effect = {
 type ability = {
   name : string;
   required : (string * int) list;
-  effect : effect * effect;
+  effect : effect option * effect option;
 }
 
 (**List of possible abilities a player can have*)
