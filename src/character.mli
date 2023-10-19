@@ -26,7 +26,7 @@ val create : string -> major -> character
     Item list and ability list should ideally be sorted from strongest to weakest
     Difficulty (1-4) determines the level of each skill, the overall experience of the character, and the battlepower
     Returns a full character with 100 hp and random stats*)
-val generate : (string * string) -> major list -> string list -> ability list -> item list -> int -> character
+val generate : (string list * string list) -> major list -> string list -> ability list -> item list -> int -> character
 
 (**Rename the character with an inputted name
     Returns the same character with a different name*)
