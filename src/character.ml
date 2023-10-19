@@ -13,6 +13,7 @@ type character = {
   abilities : ability option list;
   inventory : item list;
   status : status;
+  brbs : int;
 }
 
 (**Create the character with a given name and major*)
@@ -25,6 +26,7 @@ let create name major = {
   abilities = [None; None; None; None]; 
   inventory = []; 
   status = Alive;
+  brbs = 0
   }
 
 (**Rename the character *)
@@ -64,6 +66,7 @@ let generate (first, last) majors skills abilities items difficulty =
       abilities = abilities;
       inventory = inventory;
       status = Alive;
+      brbs = 0;
     }
 
 (**Change the health of the character and the status of being dead or alive*)
@@ -107,3 +110,13 @@ let update_skill sp skill character =
   match List.find_opt (fun x -> let y, _ = x in y = skill) character.skills with
   | Some (name, level) -> {character with skills = (name, level + sp) :: List.filter (fun x -> let y,_ = x in y <> skill) character.skills}
   | None -> {character with skills = (skill, sp) :: character.skills}
+
+let abilities_to_list character =
+  let rec converter character n acc =
+    match n with
+    | n when n < 4 -> 
+      (match List.nth character.abilities n with
+      | Some x -> acc @ [x.name]
+      | None -> acc @ [""])
+    | _ -> acc
+    in converter character 4 []

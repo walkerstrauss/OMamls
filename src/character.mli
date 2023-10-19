@@ -16,6 +16,7 @@ type character = {
     abilities : ability option list;
     inventory : item list;
     status : status;
+    brbs : int;
 }
 
 (**Create the character with its name and selected major
@@ -57,11 +58,11 @@ val add_ability : ability -> character -> character
 
 (**Overwrite the second inputted ability with the first inputted ability
     Returns the character with the overwritten the ability list
-    Returns an error if the second inputted ability is not in the characters
-    repertoire*)
+    Returns an error if the second inputted ability is not in the characters repertoire*)
 val overwrite_ability : ability -> ability -> character -> character
 
 (**Updates a the given skill by the given amount
-    Returns the character with the updated skill level or with a new skill at 
-    the given skill level*)
+    Returns the character with the updated skill level or with a new skill at the given skill level*)
 val update_skill : int -> string -> character -> character
+
+val abilities_to_list : character -> string list
