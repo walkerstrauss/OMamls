@@ -1,27 +1,33 @@
+(**
+A type with:
+Damage of the amount of damage dealt
+TurnSkip with the probability that it skips a turn
+Debuff with the skill option and percentage of skill loss
+Buff with the skill option and percentage of skill gain
+*)
+type effect_type = Damage of int * int | TurnSkip of int * int | Debuff of (string option * int) * int | Buff of (string option * int) * int
 
-type ability = {
-  name : string;
-  effect : int
+(**Affected determines who is being affected by an ability*)
+type affected = User | Opposing
+
+(**Record of the effect with its name
+    its description is what will be said when used
+    and a list of the types of effects the action does*)
+type effect = {
+    name : string;
+    description : string;
+    effect : effect_type list;
 }
 
-val sleep_through_class : ability
+(**Record of the ability with its name,
+    the skills required to use and obtain the ability
+    who the ability affects and what the actual effect is*)
+type ability = {
+  name : string;
+  required : (string * int) list;
+  affects : affected;
+  effect : effect;
+}
 
-val throw_item : ability
-
-val meditate : ability
-
-val sign_up_for_chat_gpt : ability
-
-(* val sleep_through_class : ability
-
-val empty_inventory : ability
-
-val meditate : ability
-
-(** study_for_exam char min char means char studys for min minutes, 
-    which increases experience by 10 *)
-val study_for_exam : ability
-
-(** take exam char returns a character with an updated skills list if they pass
-     the exam. Passing the exam means level and experience is high enough *)
-val take_exam : ability *)
+(**List of possible abilities a player can have*)
+val abilities : ability list

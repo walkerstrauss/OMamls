@@ -6,7 +6,7 @@ type status = Alive | Dead
 
 type character = {
   name : string;
-  health : int;
+  health : int * int;
   major : major;
   battle_power : int;
   skills : (string * int) list;
@@ -18,7 +18,7 @@ type character = {
 (**Create the character with a given name and major*)
 let create name major = {
   name = name; 
-  health = 100;
+  health = 100, 100;
   major = major; 
   battle_power = 0; 
   skills = []; 
@@ -38,7 +38,7 @@ let generate (first, last) majors skills abilities items difficulty =
   let major = List.nth majors (Random.full_int (List.length majors)) in
   let skills = let rec skill_select s acc =
     if List.length s = 0 then acc else 
-      match Random.full_int (12 / difficulty) with
+      match Random.full_int 3 with
       | 1 -> skill_select (List.tl s) acc @ [(List.hd s, 0)]
       | _ -> skill_select (List.tl s) acc
     in skill_select skills [] in
@@ -57,7 +57,7 @@ let generate (first, last) majors skills abilities items difficulty =
     in item_select items [] in
     {
       name = name;
-      health = 100;
+      health = 100, 100;
       major = major;
       battle_power = 0;
       skills = skills;
@@ -67,7 +67,10 @@ let generate (first, last) majors skills abilities items difficulty =
     }
 
 (**Change the health of the character and the status of being dead or alive*)
-let change_hp hp character =  {character with health = character.health + hp; status = if hp > 0 then Alive else Dead}
+let change_hp hp character =  
+  {character with 
+    health = (let (chp, mhp) = character.health in if chp + hp > mhp then (mhp, mhp) else (chp + hp, mhp)); 
+    status = let (chp, _) = character.health in if chp + hp > 0 then Alive else Dead}
 
 (**Change the major of the character*)
 let change_maj major character = {character with major = major}

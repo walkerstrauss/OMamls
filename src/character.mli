@@ -9,7 +9,7 @@ type status = Alive | Dead
 (**The type of the character*)
 type character = {
     name : string;
-    health : int;
+    health : int * int;
     major : major;
     battle_power : int;
     skills : (string * int) list;

@@ -1,110 +1,68 @@
+type effect_type = Damage of int * int | TurnSkip of int * int | Debuff of (string list option * int) * int | Buff of (string list option * int) * int
+type affected = User | Opponent
+
+type effect = {
+    name : string;
+    description : string;
+    effect : effect_type list;
+}
 
 type ability = {
   name : string;
-  effect : int
+  required : (string * int) list;
+  affects : affected;
+  effect : effect;
 }
 
-let sleep_through_class = { name = "Sleep through class"; effect = 400}
-
-let throw_item = { name = "Throw item"; effect = 100 }
-
-let meditate = { name = "Meditate"; effect = 300}
-
-let sign_up_for_chat_gpt = {name = "Sign up for Chat GPT"; effect = 500}
-
-(* let change_major (char: character) (maj : major) : character = 
-  if char.major = maj then char else {
-  name = char.name;
-  health = char.health;
-  major =  maj;
-  battle_power = char.battle_power;
-  skills = char.skills;
-  abilities = char.abilities;
-  inventory = char.inventory;
-  experience = char.experience;
-  level = char.level;
-  }
-
-let sleep_through_class = {
-  name = "Sleep through class";
-  effect = (fun char -> {name = char.name;
-  health = char.health + 100;
-  major =  char.major;
-  battle_power = char.battle_power;
-  skills = char.skills;
-  abilities = char.abilities;
-  inventory = char.inventory;
-  experience = char.experience - 100;
-  level = char.level})
-}
-
-let empty_inventory : ability = {
-  name = "Empty inventory";
-  effect = (fun char -> {
-    name = char.name;
-    health = char.health;
-    major = char.major;
-    battle_power = char.battle_power;
-    skills = char.skills;
-    abilities = char.abilities; 
-    inventory = [];
-    experience = char.experience;
-    level = char.level
-  })
-}
-   
-
-let add_item (char : character) (i : item) : character =
-   {
-    name = char.name;
-    health = char.health;
-    major = char.major;
-    battle_power = char.battle_power;
-    skills = char.skills; 
-    abilities = char.abilities;
-    inventory = i :: char.inventory;
-    experience = char.experience;
-    level = char.level
-   }
-
-let remove_item (char : character) (i : item) : character = 
+let abilities = [
   {
-    name = char.name;
-    health = char.health;
-    major = char.major;
-    battle_power = char.battle_power;
-    skills = char.skills;
-    abilities = char.abilities;
-    inventory = List.filter (fun i2 -> (i = i2) = false) char.inventory;
-    experience = char.experience;
-    level = char.level;
+    name = "ChatGPT";
+    required = [("Writing", 100)];
+    affects = User;
+    effect = {
+      name = "ChatGPT";
+      description = "used ChatGPT";
+      effect = [Buff ((Some ["General Knowledge"; "Writing"; "Coding"], 15), 5); Debuff ((Some ["Math"], 5), 5)];
+    }
+  };
+  {
+    name = "Throw Item";
+    required = [("Athleticism", 100); ("Accuracy", 100)];
+    affects = Opponent;
+    effect = {
+      name = "Direct Hit";
+      description = "was hit";
+      effect = [Damage (15, 1)];
+    }
+  };
+  {
+    name = "Meditate";
+    required = [("Mindfulness", 100)];
+    affects = User;
+    effect = {
+      name = "Meditation";
+      description = "is meditating";
+      effect = [Buff ((None, 20), 6); TurnSkip (100, 1)];
+    }
+  };
+  {
+    name = "Powernap";
+    required = [("Mindfuless", 500)];
+    affects = User;
+    effect = {
+      name = "Sleeping";
+      description = "is taking a powernap";
+      effect = [Buff ((None, 100), 15); TurnSkip (100, 5)];
+    }
+  };
+  {
+    name = "Belittle";
+    required = [("Confidence", 100); ("Knowledge", 100); ("Aggressiveness", 100)];
+    affects = Opponent;
+    effect = {
+      name = "Belittlement";
+      description = "has been belittled";
+      effect = [Debuff ((Some ["Confidence"], 10), 5); Debuff ((None, 5), 5)]
+    }
   }
-let take_exam : ability = {
-  name = "Take exam";
-  effect = (fun char -> if char.experience > 500 then {
-    name = char.name;
-    health = char.health;
-    major = char.major;
-    battle_power = char.battle_power;
-    skills = char.skills;
-    abilities = char.abilities;
-    inventory = char.inventory;
-    experience = 0;
-    level = char.level + 1;
-  } else char)
-}
-let study_for_exam : ability = {
-  name = "Study for exam";
-  effect = (fun char -> {
-    name = char.name;
-    health = char.health;
-    major = char.major;
-    battle_power = char.battle_power;
-    skills = char.skills;
-    abilities = char.abilities;
-    inventory = char.inventory;
-    experience = char.experience + 100;
-    level = char.level;
-  })
-}
- *)
+]
