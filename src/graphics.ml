@@ -8,7 +8,7 @@ let rec strGenerator n str acc =
 let spaceGenerator n = 
   strGenerator n " " "" 
 
-let headerTitle x = let len = (94 - String.length x) in
+let title x = let len = (94 - String.length x) in
   match len mod 2 with
   | 1 -> printf "x |%s%s%s| x \n" (spaceGenerator ((len/2) + 1)) x (spaceGenerator (len/2))
   | _ -> printf "x |%s%s%s| x \n" (spaceGenerator (len/2)) x (spaceGenerator (len/2))
@@ -22,8 +22,14 @@ let progressBar value max_value =
     
 let header text = 
   printf "+--------------------------------------------------------------------------------------------------+ \n";
-  headerTitle text;
+  text;
   printf "x==================================================================================================x \n";;
+
+let footer text =
+  printf "x==================================================================================================x \n";
+  text;
+  printf "+--------------------------------------------------------------------------------------------------+ \n";;
+
 
 (*let instore name currScreen currency items storeName = 
   match currScreen with
@@ -63,11 +69,11 @@ let header text =
 let character_creation state input =
   match state with
   | "name" ->
-    header "What shall we call you?";
+    header (title "What shall we call you?");
   | "major" ->
-    header "What is your intended major";
+    header (title "What is your intended major");
   | "confirmation" ->
-    header "Are you happy with yourself?";
+    header (title "Are you happy with yourself?");
   | _ -> failwith "This state does not exist"
 
 
@@ -79,21 +85,21 @@ let namePrint name rowSpace =
 
 let battle state p1 p2 = 
   match state with
-  | "main" -> header (p1.name ^ " is battling " ^ p2.name ^ "!");
+  | "main" -> header (title(p1.name ^ " is battling " ^ p2.name ^ "!"));
   printf "x | [1] -> %s|         |  [1] -> %s| x" (namePrint p1.name 34) (namePrint p2.name 34);
   printf "x |        %s|         |         %s| x" (namePrint (progressBar (fst p1.health) (snd p1.health)) 34) (namePrint (progressBar (fst p2.health) (snd p2.health)) 34);
               printf "x |                                          |         |                                          | x";
               printf "x |                                          |         |------------------------------------------| x";
               printf "x |                                          |         | <1> Abilities       | <3> Flee           | x";
               printf "x |                                          |         | <2> Inventory       | <CTRL-D> Quit      | x";
-              printf "x--------------------------------------------------------------------------------------------------x";
-  | "abilities" -> header "Checking the arsenal!";
+              footer (title "OMaml's Test");
+  | "abilities" -> header (title "Checking the arsenal!");
                     printf "x | [1] -> %s|         |  [1] -> %s| x" (namePrint p1.name 34) (namePrint p2.name 34);
                     printf "x |        %s|         |         %s| x" (namePrint (progressBar (fst p1.health) (snd p1.health)) 34) (namePrint (progressBar (fst p2.health) (snd p2.health)) 34);
                     printf "x |                                          |         |                                          | x";
                     printf "x |                                          |         |------------------------------------------| x";
                     printf "x |                                          |         | <1> %s| <3> %s| x" (namePrint (List.nth (abilities_to_list p1) 0)  18) (namePrint (List.nth (abilities_to_list p1) 3) 18);
                     printf "x |                                          |         | <2> %s| <4> %s| x" (namePrint (List.nth (abilities_to_list p1) 2) 18) (namePrint (List.nth (abilities_to_list p1) 4) 18);
-                    printf "x--------------------------------------------------------------------------------------------------x";
+                    footer (title "OMaml's Test");
   | _ -> failwith "This state is not found"
   

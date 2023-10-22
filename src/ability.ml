@@ -12,6 +12,20 @@ type ability = {
   effect : effect option * effect option;
 }
 
+let create_ability name required effects = 
+  {
+    name = name;
+    required = required;
+    effect = effects;
+  }
+
+let create_effect name description effect =
+  {
+    name = name;
+    description = description;
+    effect = effect;
+  }
+
 let abilities = [
   {
     name = "Pickpocket";
