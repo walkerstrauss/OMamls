@@ -6,6 +6,9 @@ type major = CS | ECE | MechE | ChemE | CivilE | IS
 (**The current status of the character*)
 type status = Alive | Dead
 
+(**If the character is controlled by a User or Computer. *)
+type host = User | Computer
+
 (**The type of the character*)
 type character = {
     name : string;
@@ -17,11 +20,12 @@ type character = {
     inventory : item list;
     status : status;
     brbs : int;
+    host : host;
 }
 
 (**Create the character with its name and selected major
     Returns the full character with 100 hp with base stats*)
-val create : string -> major -> character
+val create : string -> major -> host -> character
 
 (**Generate a custom character with lists of options for each major aspect of the character
     Item list and ability list should ideally be sorted from strongest to weakest

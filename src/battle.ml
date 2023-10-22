@@ -2,49 +2,83 @@ open Character
 open Item
 open Ability
 
-let rec get_user_choice () =
-  Printf.printf "Select an option (1-3):\n";
-  Printf.printf "1. Attack\n";
-  Printf.printf "2. Items\n";
-  Printf.printf "3. Flee\n";
+let get_user_choice (message : string) = 
+  print_endline (message);
+  print_string "> ";
 
-let print_abilities (char1 : character) =
-  let print_ability (ab) (num) =
-    match ab with 
-    | None -> Printf.printf "No ability\n";
-    | Some a -> Printf.printf (num ^ a.name ^ "\n");
-  in 
-
+let print_abilities (char1 : character): string =
   let ability1 = List.hd char1.abilities in 
   let ability2 = List.nth char1.abilities 1 in
   let ability3 = List.nth char1.abilities 2 in
   let ability4 = List.nth char1.abilities 3 in
+  let print_ability (ability) : string =
+    match ability with 
+    | None -> "No Ability"
+    | Some a -> a.name 
+  in ("Please select the following options (1-3):\n 
+  1. " ^ (print_ability ability1) ^ "\n 2. " ^ (print_ability ability2) ^ "\n 
+  3. " ^ (print_ability ability3) ^ "\n 4. " ^ (print_ability ability4))
   
-  let () = print_ability ability1 "1. " in
-  let () = print_ability ability2 "2. " in 
-  let () = print_ability ability3 "3. " in
-  let () = print_ability ability4 "4. " in 
+let print_inventory (char1: character): string = 
+  let invent = char1.inventory in 
+  let rec print_int (inventory : item list) (counter: int): string = match inventory with 
+  | [] -> ""
+  | h :: t -> "\n" ^ string_of_int counter ^ ": " ^ h.name ^ (print_int t (counter + 1)) 
+  in ("Please select the following items (1 - " ^ (string_of_int (List.length invent)) ^ "): " ^ (print_int invent 0))
 
-  ()
+let rec ability_action (player: character) (ability: (effect_type * int) list): character = 
+  match ability with
+  | [] -> player
+  | h :: t -> let updated_player = match h with
+    | (Damage (damage, _), _ ) -> (Character.change_hp (-damage) player)
+    | (RemoveItem, _) -> let (_, x) = (Character.remove_item (List.hd char1.inventory) player) in (x)
+    | (AddItem, _) -> (Character.add_item List.nth ((List.hd consumables_catelog) (Random.int 2)) player)
+    | (_, _) -> player 
+  in ability_action x t
 
-let attack (char1 : character) (char2 : character) : () = 
-  let () = print_abilities char1 in 
-  let choice = int_of_string (read_line()) in 
-  match choice with 
-  |1 -> Character.change_hp (List.hd char1.abilities).effect char2
-  |2 -> Character.change_hp (List.nth char1.abilities 1).effect char2
-  |3 -> Character.change_hp (List.nth char1.abilities 2).effect char2
-  |4 -> Character.change_hp (List.nth char1.abilities 3).effect char2
-  in 
-  ()
+let rec attack (char1 : character) (char2 : character) : (character * character) = 
+  let choice = (if (char1.host = Computer) then ((Random.int 4) + 1) 
+    else (read_int (get_user_choice (print_abilities char1)))) in 
+  let ab = (match choice with 
+  |1 -> (List.hd char1.abilities)
+  |2 -> (List.nth char1.abilities 1)
+  |3 -> (List.nth char1.abilities 2)
+  |4 -> (List.nth char1.abilities 3) 
+  | _ -> Printf.printf("Not an option.\n"); attack char1 char2)
+  in match ab with
+  | None -> Printf.printf ("No ability.\n"); attack char1 char2
+  | Some x -> (match x.effect with
+      | (Some (e1), Some (e2)) -> ((ability_action char1 e1.effect), (ability_action char2 e2.effect)))
 
-let rec move (char1 : character) (char2 : character) = 
-  let () = get_user_choice () in 
-  let choice = int_of_string (read_line()) in 
+let rec items (char1: character) : character = 
+  let choice = if (char1.host = Computer) then ((Random.int (List.length char1.inventory)) + 1)
+   else (read_int (get_user_choice (print_inventory char1))) in 
+   let item = List.nth char1.inventory choice in 
+   match item with 
+   | Consumable (hp_increase, _) -> (let (_, updated_char) = Character.remove_item item char1 
+      in Character.change_hp hp_increase updated_char)
+   | _ -> Printf.printf("We can't use this item during battle. \n"); items char1
+
+let flee (char1: character): character = 
+  if((Random.int 500) < 25) then(raise Invalid_argument("Fled Battle.")) else (char1)
+
+let rec move (char1 : character) (char2 : character) : character * character = 
+  let move_options = "Select an option (1-3):\n 1. Attack\n 2. Items\n 3. Flee\n" in 
+  let choice = if (char1.host = Computer) then (Random.int 3) + 1 else (read_int (get_user_choice move_options)) in 
   match choice with
-  |1 ->  let () = attack char1 char2 in
-  |2 -> let () = items char1 in
-  |3 -> let () = flee char1 in
-  in 
-  if (char1.status = Alive && char2.status = Alive) then move char1 char2 else ()
+  |1 ->  attack char1 char2 
+  |2 -> let updated_char = items char1 in (updated_char, char2)
+  |3 -> (try flee char1 with 
+    | Invalid_argument -> Printf.printf("End Battle");  
+    | _ -> (char1, char2))
+  |_ -> Printf.printf("Not a option. \n"); move char1 char2
 
+
+let battle (char1 : character) (char2 : character): character = 
+  let rec battle_progression (player1 : character) (player2 : character) (turns : int) : character = 
+    let (updated_player1, updated_player2) = (Printf.printf ("Turn: " ^ (string_of_int (turn/2))); move player1 player2) in 
+      if(updated_player1.status = Alive && updated_player2 = Alive) 
+        then (battle_progression updated_player2 updated_player1 (turns + 1)) 
+        else (if(updated_player1.host = User) then (Printf.printf("Finished battle!"); updated_player1) 
+          else (Printf.printf ("Finished battle!"); updated_player2))
+  in Printf.printf ("Begin battle!"); battle_progression char1 char2 2
