@@ -3,6 +3,7 @@ open Ability
 
 type major = CS | ECE | MechE | ChemE | CivilE | IS
 type status = Alive | Dead
+type host = User | Computer
 
 type character = {
   name : string;
@@ -14,19 +15,21 @@ type character = {
   inventory : item list;
   status : status;
   brbs : int;
+  host : host;
 }
 
 (**Create the character with a given name and major*)
-let create name major = {
+let create name major host = {
   name = name; 
-  health = 100, 100;
+  health = (100, 100);
   major = major; 
   battle_power = 0; 
   skills = []; 
   abilities = [None; None; None; None]; 
   inventory = []; 
   status = Alive;
-  brbs = 0
+  brbs = 0;
+  host = host;
   }
 
 (**Rename the character *)
@@ -67,6 +70,7 @@ let generate (first, last) majors skills abilities items difficulty =
       inventory = inventory;
       status = Alive;
       brbs = 0;
+      host = Computer;
     }
 
 (**Change the health of the character and the status of being dead or alive*)
