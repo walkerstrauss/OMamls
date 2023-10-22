@@ -4,20 +4,17 @@ open Ability
 
 let get_user_choice (message : string) = 
   print_endline (message);
-  print_string "> ";
+  print_string "> ";;
+  
 
 let print_abilities (char1 : character): string =
-  let ability1 = List.hd char1.abilities in 
-  let ability2 = List.nth char1.abilities 1 in
-  let ability3 = List.nth char1.abilities 2 in
-  let ability4 = List.nth char1.abilities 3 in
-  let print_ability (ability) : string =
+  let print_ability ability : string =
     match ability with 
     | None -> "No Ability"
-    | Some a -> a.name 
-  in ("Please select the following options (1-3):\n 
-  1. " ^ (print_ability ability1) ^ "\n 2. " ^ (print_ability ability2) ^ "\n 
-  3. " ^ (print_ability ability3) ^ "\n 4. " ^ (print_ability ability4))
+    | Some a -> a.name
+  in  "Please select the following options (1-3):\n 
+  1. " ^ (print_ability (List.hd char1.abilities)) ^ "\n 2. " ^ (print_ability (List.nth char1.abilities 2)) ^ "\n 
+  3. " ^ (print_ability  (List.nth char1.abilities 2)) ^ "\n 4. " ^ (print_ability  (List.nth char1.abilities 2))
   
 let print_inventory (char1: character): string = 
   let invent = char1.inventory in 
@@ -30,9 +27,9 @@ let rec ability_action (player: character) (ability: (effect_type * int) list): 
   match ability with
   | [] -> player
   | h :: t -> let updated_player = match h with
-    | (Damage (damage, _), _ ) -> (Character.change_hp (-damage) player)
-    | (RemoveItem, _) -> let (_, x) = (Character.remove_item (List.hd char1.inventory) player) in (x)
-    | (AddItem, _) -> (Character.add_item List.nth ((List.hd consumables_catelog) (Random.int 2)) player)
+    | (Damage damage, _ ) -> (Character.change_hp (-damage) player)
+    | (RemoveItem, _) -> let (_, x) = (Character.remove_item (List.hd player.inventory) player) in (x)
+    | (AddItem, _) -> Character.add_item (List.nth consumables_catelog (Random.int 2)) player
     | (_, _) -> player 
   in ability_action x t
 
@@ -81,4 +78,4 @@ let battle (char1 : character) (char2 : character): character =
         then (battle_progression updated_player2 updated_player1 (turns + 1)) 
         else (if(updated_player1.host = User) then (Printf.printf("Finished battle!"); updated_player1) 
           else (Printf.printf ("Finished battle!"); updated_player2))
-  in Printf.printf ("Begin battle!"); battle_progression char1 char2 2
+  in Printf.printf ("Begin battle!") in battle_progression char1 char2 2

@@ -1,3 +1,10 @@
 (library
  (name omamls)
- (public_name OMamls))
+ (public_name OMamls)
+ (flags
+  (:standard -warn-error -A)))
+
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))

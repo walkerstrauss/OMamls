@@ -2,7 +2,13 @@ open Item
 open Ability
 
 (**The possible majors to choose from*)
-type major = CS | ECE | MechE | ChemE | CivilE | IS
+type major = 
+    | CS 
+    | ECE 
+    | MechE 
+    | ChemE 
+    | CivilE 
+    | IS
 (**The current status of the character*)
 type status = Alive | Dead
 
@@ -25,7 +31,7 @@ type character = {
 
 (**Create the character with its name and selected major
     Returns the full character with 100 hp with base stats*)
-val create : string -> major -> host -> character
+val create : string -> major -> int -> int -> int -> host -> character
 
 (**Generate a custom character with lists of options for each major aspect of the character
     Item list and ability list should ideally be sorted from strongest to weakest
@@ -69,4 +75,6 @@ val overwrite_ability : ability -> ability -> character -> character
     Returns the character with the updated skill level or with a new skill at the given skill level*)
 val update_skill : int -> string -> character -> character
 
+(**Convert the abilities of a character to a list
+    Returns the name of the character's abilities*)
 val abilities_to_list : character -> string list

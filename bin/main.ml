@@ -48,8 +48,7 @@ let () =
   | "CivilE" -> CivilE
   | "IS" -> IS 
   | _ -> CS in 
-  let host = User in 
-  let charac = create name major1 host in
+  let charac = create name major1 4 100 0 User in
   let major2 = match major1 with 
   | CS -> "CS"
   | ECE -> "ECE"

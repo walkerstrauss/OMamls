@@ -1,10 +1,14 @@
 open Item
 open Ability
 
+(**Character major type*)
 type major = CS | ECE | MechE | ChemE | CivilE | IS
+
+(**Character status type*)
 type status = Alive | Dead
 type host = User | Computer
 
+(**Character type*)
 type character = {
   name : string;
   health : int * int;
@@ -18,22 +22,28 @@ type character = {
   host : host;
 }
 
+(**Helper function that creates a string with the required amount of abilities*)
+let rec abilities_list amt acc =
+  match amt with
+  | 0 -> acc
+  | _ -> abilities_list (amt - 1) (None::acc)
+
 (**Create the character with a given name and major*)
-let create name major host = {
-  name = name; 
-  health = (100, 100);
+let create name major ability_amt max_hp brbs host = {
+  name = if String.length (String.trim name) = 0 then "Untitled" else name;
+  health = max_hp, max_hp;
   major = major; 
   battle_power = 0; 
   skills = []; 
-  abilities = [None; None; None; None]; 
+  abilities = abilities_list ability_amt []; 
   inventory = []; 
   status = Alive;
-  brbs = 0;
-  host = host;
+  brbs = brbs;
+  host = host
   }
 
 (**Rename the character *)
-let rename name character = {character with name = name}
+let rename name character = if String.length (String.trim name) = 0 then {character with name = "Untitled"} else {character with name = name}
 
 (**Generate a random character*)
 let generate (first, last) majors skills abilities items difficulty = 
@@ -61,7 +71,7 @@ let generate (first, last) majors skills abilities items difficulty =
       | _ -> item_select (List.tl i) acc
     in item_select items [] in
     {
-      name = name;
+      name = if String.length (String.trim name) = 0 then "Untitled" else name;
       health = 100, 100;
       major = major;
       battle_power = 0;
@@ -115,6 +125,7 @@ let update_skill sp skill character =
   | Some (name, level) -> {character with skills = (name, level + sp) :: List.filter (fun x -> let y,_ = x in y <> skill) character.skills}
   | None -> {character with skills = (skill, sp) :: character.skills}
 
+(**Convert the abilities that a character has to a list of strings with the name of the abilities*)
 let abilities_to_list character =
   let rec converter character n acc =
     match n with
@@ -123,4 +134,4 @@ let abilities_to_list character =
       | Some x -> acc @ [x.name]
       | None -> acc @ [""])
     | _ -> acc
-    in converter character 4 []
+    in converter character (List.length character.abilities) []
