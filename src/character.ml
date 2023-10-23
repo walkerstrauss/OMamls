@@ -47,6 +47,7 @@ let rename name character = if String.length (String.trim name) = 0 then {charac
 
 (**Generate a random character*)
 let generate (first, last) majors skills abilities items difficulty = 
+  Random.self_init ();
   let name = List.nth first (Random.full_int (List.length first)) ^
    " " ^ 
    List.nth last (Random.full_int (List.length last)) in
