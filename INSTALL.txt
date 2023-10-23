@@ -1,0 +1,13 @@
+1. From the terminal and in the directory of the zip file, use the command 'unzip OMamls.zip' to unzip the zip file
+
+2. Enter the OMamls directory by running 'cd OMamls'
+
+3. Run 'dune build' from the terminal to introduce configuration for project
+
+4. You are now ready to play the game. Run 'make play' from the terminal to play the game
+
+5. Choose a name and a major according to the instructions in the terminal. 
+
+6. Use '1','2', and '3' to choose attack, items, or flee options in battle. 
+
+7. To start the game over, run 'make play' again and reinput your character's name and desired major
