@@ -11,7 +11,7 @@ let print_abilities (char1 : character): string =
     match ability with 
     | None -> "No Ability"
     | Some a -> a.name
-  in  "Please select the following options (1-3):\n
+  in  "Please select the following options (1-4):\n
   1. " ^ (print_ability (List.hd char1.abilities)) ^ "\n
   2. " ^ (print_ability (List.nth char1.abilities 1)) ^ "\n
   3. " ^ (print_ability (List.nth char1.abilities 2)) ^ "\n
