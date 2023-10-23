@@ -26,11 +26,11 @@ let char2_ability_test = "Please select the following options (1-3):\n
 2. No Ability \n 
 3. No Ability \n 4. No Ability"
 
-let build_tests = [
+let battle_tests = [
   ("Character print abilities" >::fun _ -> (assert_equal char2_ability_test (Battle.print_abilities char2)))
 ]
 
 let test = "Test Suite for OMamls: Cornell RPG"
-  >::: List.flatten [tests; build_tests]
+  >::: List.flatten [tests; battle_tests]
 
 let _ = run_test_tt_main test

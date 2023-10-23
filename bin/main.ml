@@ -67,6 +67,6 @@ let () =
   let charac_cpu = (generate (first_names, last_names) major_list [] Ability.abilities Item.consumables_catelog 2) in
   let battle_charac = add_item (List.hd consumables_catelog) (add_ability (List.hd Ability.abilities) charac) in
   try(let updated_charac = battle battle_charac charac_cpu in 
-    if (updated_charac.status = Dead) then print_endline ("Character has died. Game Over!")
+    if (updated_charac.status = Dead) then print_endline (updated_charac.name ^ " has died. Game Over!")
     else print_endline (updated_charac.name ^ " has won the battle!")) with 
   | Invalid_argument x -> (print_endline x);

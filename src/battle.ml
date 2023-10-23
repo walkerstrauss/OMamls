@@ -83,12 +83,12 @@ let rec move (char1 : character) (char2 : character) : character * character =
 
 let battle (char1: character) (char2: character): character = 
   let rec battle_progression (player1 : character) (player2 : character) (turns : int) : character = 
-    let (updated_player1, updated_player2) = print_endline("Turn: " ^ (string_of_int (turns/2)) ^ " (" 
+    let (updated_player1, updated_player2) = print_endline("\nTurn: " ^ (string_of_int (turns/2)) ^ " (" 
       ^ player1.name ^ ")\n" ^ player1.name ^ "'s health: " ^ (let (x, _) = player1.health in string_of_int x) 
       ^ "\n"  ^ player2.name ^ "'s health: " ^ (let (x, _) = player2.health in string_of_int x) ^ "\n"); 
       move player1 player2 in 
     if((updated_player1.status = Alive && updated_player2.status = Alive)) 
       then (battle_progression updated_player2 updated_player1 (turns + 1)) 
-      else (if(updated_player1.host = User) then (Printf.printf("Finished battle!"); updated_player1) 
+      else (if(updated_player1.host = User) then (Printf.printf("Finished battle! "); updated_player1) 
         else (Printf.printf ("Finished battle! "); updated_player2))
-  in Printf.printf ("Begin battle!\n\n"); battle_progression char1 char2 2
+  in Printf.printf ("Begin battle!\n"); battle_progression char1 char2 2
