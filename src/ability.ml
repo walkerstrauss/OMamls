@@ -28,6 +28,24 @@ let create_effect name description effect =
 
 let abilities = [
   {
+    name = "Punch";
+    required = [("Strength", 1)];
+    effect = (None, Some {
+      name = "Punch";
+      description = "has been punched!";
+      effect = [Damage 20, 1];
+    })
+  };
+  {
+    name = "Slap";
+    required = [("Strength", 1)];
+    effect = (None, Some {
+      name = "Punch";
+      description = "has been slapped!";
+      effect = [Damage 10, 1];
+    })
+  };
+  (* {
     name = "Pickpocket";
     required = [("Discretion", 100)];
     effect = (Some {
@@ -39,8 +57,8 @@ let abilities = [
       description = "has inconspicuously lost an item";
       effect = [RemoveItem, 1];
     })
-  };
-  {
+  }; *)
+  (* {
     name = "ChatGPT";
     required = [("Writing", 100); ("Discretion", 50)];
     effect = (Some {
@@ -48,7 +66,7 @@ let abilities = [
       description = "used ChatGPT";
       effect = [Buff (Some ["General Knowledge"; "Writing"; "Coding"], 15), 5; Debuff (Some ["Math"], 5), 5];
     }, None)
-  };
+  }; *)
   {
     name = "Throw Item";
     required = [("Athleticism", 100); ("Accuracy", 100)];
@@ -71,7 +89,7 @@ let abilities = [
       effect = [Buff (None, 20), 6; TurnSkip 100, 1];
     }, None)
   };
-  {
+  (* {
     name = "Powernap";
     required = [("Mindfuless", 500)];
     effect =  (Some {
@@ -87,6 +105,6 @@ let abilities = [
       name = "Belittlement";
       description = "has been belittled";
       effect = [Debuff (Some ["Confidence"], 10), 5; Debuff (None, 5), 5]
-    })
-  }
+    }) 
+  } *)
 ]

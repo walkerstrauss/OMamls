@@ -66,7 +66,7 @@ let footer text =
   | _ -> failwith "Store doesn't have this screen"
 *)
 
-let character_creation state input =
+(* let character_creation state input =
   match state with
   | "name" ->
     header (title "What shall we call you?");
@@ -75,7 +75,7 @@ let character_creation state input =
   | "confirmation" ->
     header (title "Are you happy with yourself?");
   | _ -> failwith "This state does not exist"
-
+ *)
 
 
 

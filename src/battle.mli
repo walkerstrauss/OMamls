@@ -28,9 +28,6 @@ val items : character -> character
     an error, otherwise returns the character. *)
 val flee : character -> character
 
-(** A message of the overall move options the character has in a specific turn in battle.*)
-val move_option : string
-
 (** Character move during battle. During this move, the character has the option of attack, item, and flee. 
     Depending on the choice made, the character's status or health changes. 
     If the option wasn't either attack, item or flee, then the character gets to make the same choice again.*)
