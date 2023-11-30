@@ -6,7 +6,6 @@ type major = CS | ECE | MechE | ChemE | CivilE | IS
 
 (**Character status type*)
 type status = Alive | Dead
-type host = User | Computer
 
 (**Character type*)
 type character = {
@@ -19,7 +18,6 @@ type character = {
   inventory : item list;
   status : status;
   brbs : int;
-  host : host;
 }
 
 (**Helper function that creates a string with the required amount of abilities*)
@@ -29,7 +27,7 @@ let rec abilities_list amt acc =
   | _ -> abilities_list (amt - 1) (None::acc)
 
 (**Create the character with a given name and major*)
-let create name major ability_amt max_hp brbs host = {
+let create name major ability_amt max_hp brbs = {
   name = if String.length (String.trim name) = 0 then "Untitled" else name;
   health = max_hp, max_hp;
   major = major; 
@@ -39,7 +37,6 @@ let create name major ability_amt max_hp brbs host = {
   inventory = []; 
   status = Alive;
   brbs = brbs;
-  host = host
   }
 
 (**Rename the character *)
@@ -81,7 +78,6 @@ let generate (first, last) majors skills abilities items difficulty =
       inventory = inventory;
       status = Alive;
       brbs = 0;
-      host = Computer;
     }
 
 (**Change the health of the character and the status of being dead or alive*)
@@ -99,7 +95,7 @@ let add_item item character = {character with inventory = item :: character.inve
 (**Remove an item from the character's inventory*)
 let remove_item item character = 
   match List.find_opt (fun x -> x = item) character.inventory with
-  | Some x -> (Some x, {character with inventory = List.find_all (fun x -> x <> x) character.inventory})
+  | Some i -> (Some i, {character with inventory = List.find_all (fun x -> x <> i) character.inventory})
   | None -> (None, {character with inventory = character.inventory})
 
 (**Add an ability to the character's repertoire of abilities*)

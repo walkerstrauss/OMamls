@@ -20,7 +20,6 @@ type effect_type =
     its description is what will be said when used
     and a list of the types of effects the action does*)
 type effect = {
-    name : string;
     description : string;
     effect : (effect_type * int) list;
 }
@@ -40,7 +39,7 @@ val create_ability : string -> (string * int) list -> effect option * effect opt
 
 (**Function that creates an effect with the inputs
     Returns an effect*)
-val create_effect : string -> string -> (effect_type * int) list -> effect
+val create_effect : string -> (effect_type * int) list -> effect
 
 
 (**List of possible abilities a player can have*)

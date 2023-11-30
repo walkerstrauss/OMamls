@@ -6,8 +6,8 @@ open Character
    Character Tests
  ********************************************************************)
 
-let char1 = Character.create "Talia" CS 4 100 0 User
-let char2 = Character.create "" CS 4 100 0 User
+let char1 = Character.create "Talia" CS 4 100 0
+let char2 = Character.create "" CS 4 100 0
 
 let tests = [
   ("Character creation | Name: Untitled">::fun _ -> (assert_equal "Untitled" char2.name));

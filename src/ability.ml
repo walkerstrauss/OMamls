@@ -1,7 +1,12 @@
-type effect_type = Damage of int| TurnSkip of int | Debuff of (string list option * int) | Buff of (string list option * int) | AddItem | RemoveItem
+type effect_type = 
+  | Damage of int 
+  | TurnSkip of int 
+  | Debuff of (string list option * int) 
+  | Buff of (string list option * int) 
+  | AddItem 
+  | RemoveItem
 
 type effect = {
-    name : string;
     description : string;
     effect : (effect_type * int) list;
 }
@@ -19,9 +24,8 @@ let create_ability name required effects =
     effect = effects;
   }
 
-let create_effect name description effect =
+let create_effect description effect =
   {
-    name = name;
     description = description;
     effect = effect;
   }
@@ -29,19 +33,16 @@ let create_effect name description effect =
 let abilities = [
   {
     name = "Punch";
-    required = [("Strength", 1)];
+    required = [(*("Strength", 1)*)];
     effect = (None, Some {
-      name = "Punch";
       description = "has been punched!";
       effect = [Damage 20, 1];
     })
   };
   {
     name = "Slap";
-    required = [("Strength", 1)];
-    effect = (None, Some {
-      name = "Punch";
-      description = "has been slapped!";
+    required = [(*("Strength", 1)*)];
+    effect = (None, Some {      description = "has been slapped!";
       effect = [Damage 10, 1];
     })
   };
@@ -71,11 +72,9 @@ let abilities = [
     name = "Throw Item";
     required = [("Athleticism", 100); ("Accuracy", 100)];
     effect = (Some {
-      name = "Throw Item";
       description = "has thrown something very impressingly";
       effect = [RemoveItem, 1];
     }, Some {
-      name = "Hit by item";
       description = "was hit by something";
       effect = [Damage 15, 1];
     })
@@ -84,7 +83,6 @@ let abilities = [
     name = "Meditate";
     required = [("Mindfulness", 100)];
     effect = (Some {
-      name = "Meditation";
       description = "is meditating";
       effect = [Buff (None, 20), 6; TurnSkip 100, 1];
     }, None)
