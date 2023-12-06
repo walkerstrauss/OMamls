@@ -26,7 +26,7 @@ type character = {
 }
 (**The type of the character*)
 
-val create : string -> major -> int -> int -> int -> host -> character
+val create : string -> major -> int -> int -> int -> character
 (**Create the character with its name and selected major
     Returns the full character with 100 hp with base stats*)
 val create : string -> major -> int -> int -> int -> character
