@@ -32,33 +32,27 @@ let character_tests =
 let char2 = Character.add_ability (List.hd Ability.abilities) char1
 
 let char2_ability_test_one_ability =
-  "Please select the following options (1-3):\n\
-  \ \n\
-   1. Punch \n\
-  \ \n\
-   2. No Ability \n\
-  \ \n\
-   3. No Ability \n\
-  \ 4. No Ability"
+  "Please select the following options (1 - 4):\n\
+  \ 1. Punch\n\
+  \ 2. No Ability\n\
+  \ 3. No Ability\n\
+  \ 4. No Ability\n"
 
 let char2_ability_test_no_abilities =
-  "Please select the following options (1-3):\n\
-  \ \n\
-   1. No Ability \n\
-  \ \n\
-   2. No Ability \n\
-  \ \n\
-   3. No Ability \n\
-  \ 4. No Ability"
+  "Please select the following options (1 - 4):\n\
+  \ 1. No Ability\n\
+  \ 2. No Ability\n\
+  \ 3. No Ability\n\
+  \ 4. No Ability\n"
 
 let battle_tests =
   [
     ( "Character print abilities" >:: fun _ ->
       assert_equal char2_ability_test_one_ability (Battle.print_abilities char2)
-    );
+        ~printer:(fun x -> x) );
     ( "Print abilities for no abilities" >:: fun _ ->
       assert_equal char2_ability_test_no_abilities
-        (Battle.print_abilities char1) );
+        (Battle.print_abilities char1) ~printer:(fun x -> x) );
   ]
 
 let test =
