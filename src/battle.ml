@@ -87,7 +87,7 @@ and use_item (character : battle_character) (item : item) : battle_character =
 
 let rec attack (state : state) (n : int) : state =
   let (er, ee, comp) = match state with
-  | (user, User, opp) -> clear_lines 7;(user, opp, User)
+  | (user, User, opp) -> (*clear_lines 7;*) (user, opp, User)
   | (user, Opponent, opp) -> (opp, user, Opponent)
   | _ -> failwith "Shouldn't be here"
   in match (List.nth_opt (fst er).abilities (n - 1)) with
@@ -125,10 +125,10 @@ and turn (env : env) : env =
         else 
           let turn_options = "Select an option (1 - 3):\n 1. Attack\n 2. Items \n 3. Flee\n" in (
             match read_int (get_user_choice turn_options) with
-            | 1 -> clear_lines 6; print_endline ((fst user').name ^ " chose to attack!");  
+            | 1 -> (*clear_lines 6;*) print_endline ((fst user').name ^ " chose to attack!");  
                   turn ((attack (user', User, opp) (read_int (get_user_choice (print_abilities (fst user))))) :: env)
-            | 2 -> clear_lines 6;print_endline ((fst user').name ^ " is getting an item!"); let user' = item user (read_int (get_user_choice (print_inventory (fst user)))) in turn ((user', User, opp) :: env)
-            | 3 -> clear_lines 6; print_endline ((fst user').name ^ " is attempting to flee!"); flee env
+            | 2 -> (*clear_lines 6;*) print_endline ((fst user').name ^ " is getting an item!"); let user' = item user (read_int (get_user_choice (print_inventory (fst user)))) in turn ((user', User, opp) :: env)
+            | 3 -> (*clear_lines 6;*) print_endline ((fst user').name ^ " is attempting to flee!"); flee env
             | _ -> turn env;) 
   | (user, Opponent, opp) -> (*Graphics.battle "main" (fst user) (fst opp);*) let opp' = apply_old_effects opp in 
       if fst (fst opp').health <= 0 then (user, End User, opp')::env else  
@@ -145,5 +145,4 @@ and turn (env : env) : env =
   | (_, End _, _) -> env
 
   let battle (user : character) (opp : character) : state = 
-    
     List.hd (turn [((user, []), User, (opp, []))])
