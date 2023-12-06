@@ -29,16 +29,29 @@ let character_tests =
       assert_equal Dead (Character.change_hp (-120) char1).status );
   ]
 
-let char2 = Character.add_ability (List.hd Ability.abilities) char1
+(********************************************************************
+    Ability Tests
+  ********************************************************************)
 
-let char2_ability_test_one_ability =
+(********************************************************************
+   Item Tests
+ ********************************************************************)
+
+(********************************************************************
+   Battle Tests
+ ********************************************************************)
+
+let one_ability_char = Character.add_ability (List.hd Ability.abilities) (Character.create "" ECE 4 100 0)
+let empty_ability_char = (Character.create "" ECE 4 100 0)
+
+let ability_test_one_ability =
   "Please select the following options (1 - 4):\n\
   \ 1. Punch\n\
   \ 2. No Ability\n\
   \ 3. No Ability\n\
   \ 4. No Ability\n"
 
-let char2_ability_test_no_abilities =
+let ability_test_no_abilities =
   "Please select the following options (1 - 4):\n\
   \ 1. No Ability\n\
   \ 2. No Ability\n\
@@ -48,11 +61,11 @@ let char2_ability_test_no_abilities =
 let battle_tests =
   [
     ( "Character print abilities" >:: fun _ ->
-      assert_equal char2_ability_test_one_ability (Battle.print_abilities char2)
+      assert_equal ability_test_one_ability (Battle.print_abilities one_ability_char)
         ~printer:(fun x -> x) );
     ( "Print abilities for no abilities" >:: fun _ ->
-      assert_equal char2_ability_test_no_abilities
-        (Battle.print_abilities char1) ~printer:(fun x -> x) );
+      assert_equal ability_test_no_abilities
+        (Battle.print_abilities empty_ability_char) ~printer:(fun x -> x) );
   ]
 
 let test =
