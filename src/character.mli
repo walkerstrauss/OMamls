@@ -12,26 +12,24 @@ type major =
 
 type status = Alive | Dead
 
-(**If the character is controlled by a User or Computer. *)
-type host = User | Computer
-
+(**The type of the character*)
 type character = {
-  name : string;
-  health : int * int;
-  major : major;
-  battle_power : int;
-  skills : (string * int) list;
-  abilities : ability option list;
-  inventory : item list;
-  status : status;
-  brbs : int;
-  host : host;
+    name : string;
+    health : int * int;
+    major : major;
+    battle_power : int;
+    skills : (string * int) list;
+    abilities : ability option list;
+    inventory : item list;
+    status : status;
+    brbs : int;
 }
 (**The type of the character*)
 
 val create : string -> major -> int -> int -> int -> host -> character
 (**Create the character with its name and selected major
     Returns the full character with 100 hp with base stats*)
+val create : string -> major -> int -> int -> int -> character
 
 val generate :
   string list * string list ->

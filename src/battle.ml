@@ -1,180 +1,148 @@
 open Character
 open Item
 open Ability
+open Helper
+
+type turn = User | Opponent | End of turn
+type battle_character = (character * (effect_type * int) list)
+type state = (battle_character * turn * battle_character) 
+type env = state list
 
 let get_user_choice (message : string) =
   print_endline message;
   print_string "> "
+  
+let print_abilities (character : character) : string =
+  let print_ability (ability : ability option) : string =
+    match ability with 
+    | None -> "No Ability"
+    | Some a -> a.name
+  in  "Please select the following options (1 - 4):
+ 1. " ^ (print_ability (List.hd character.abilities)) ^ "
+ 2. " ^ (print_ability (List.nth character.abilities 1)) ^ "
+ 3. " ^ (print_ability (List.nth character.abilities 2)) ^ "
+ 4. " ^ (print_ability (List.nth character.abilities 3) ^ "\n")
 
-let print_abilities (char1 : character) : string =
-  let print_ability ability : string =
-    match ability with None -> "No Ability" | Some a -> a.name
-  in
-  "Please select the following options (1-4):\n\n  1. "
-  ^ print_ability (List.hd char1.abilities)
-  ^ "\n\n  2. "
-  ^ print_ability (List.nth char1.abilities 1)
-  ^ "\n\n  3. "
-  ^ print_ability (List.nth char1.abilities 2)
-  ^ "\n\n  4. "
-  ^ print_ability (List.nth char1.abilities 3)
-  ^ "\n"
-
-let print_inventory (char1 : character) : string =
-  let invent = char1.inventory in
-  let rec print_int (inventory : item list) (counter : int) : string =
-    match inventory with
+let print_inventory (character: character) : string = 
+  let init = "Please select the following options (1 - " ^ string_of_int (List.length character.inventory) ^ "):\n" in
+  let rec print_items (items : item list) (count : int) : string =
+    match items with
     | [] -> ""
-    | h :: t ->
-        "\n" ^ string_of_int counter ^ ": " ^ h.name ^ print_int t (counter + 1)
-  in
-  "Please select the following items (1 - "
-  ^ string_of_int (List.length invent)
-  ^ "): " ^ print_int invent 1
+    | h :: t -> " " ^string_of_int count ^ ". " ^ h.name ^ " -> " ^ h.description ^ "\n" ^ print_items t (count + 1)
+  in init ^ print_items (character.inventory) 1
+  
 
-let rec ability_action (player : character) (ability : (effect_type * int) list)
-    : character =
-  match ability with
-  | [] -> player
-  | h :: t ->
-      let updated_player =
-        match h with
-        | Damage damage, _ -> Character.change_hp (-damage) player
-        | RemoveItem, _ ->
-            if List.length player.inventory = 0 then (
-              print_endline "No items to be removed!";
-              player)
-            else
-              let _, x =
-                Character.remove_item (List.hd player.inventory) player
-              in
-              x
-        | AddItem, _ ->
-            Character.add_item
-              (List.nth consumables_catelog (Random.int 2))
-              player
-        | _, _ -> player
-      in
-      ability_action updated_player t
+let rec use_ability (user : battle_character) (opp : battle_character)  (ability: ability) : (battle_character * battle_character) option = 
+  let {name = name; required = required; effect = effect} = ability in
+  if has_requirement (fst user) required then match effect with
+    | (Some e1, None) -> (Printf.printf "%s used %s!\n" ((fst user).name) name);Some (apply_new_effect user e1, opp)
+    | (None, Some e2) -> (Printf.printf "%s used %s on %s!\n" ((fst user).name) name ((fst opp).name)); Some (user, apply_new_effect opp e2)
+    | (Some e1, Some e2) -> (Printf.printf "%s used %s!\n" ((fst user).name) name);Some (apply_new_effect user e1, apply_new_effect opp e2)
+    | (None, None) -> None
+   else None
 
-let rec attack (char1 : character) (char2 : character) : character * character =
-  let choice =
-    if char1.host = Computer then Random.int 4 + 1
-    else read_int (get_user_choice (print_abilities char1))
-  in
-  let ab =
-    match choice with
-    | 1 -> List.hd char1.abilities
-    | 2 -> List.nth char1.abilities 1
-    | 3 -> List.nth char1.abilities 2
-    | 4 -> List.nth char1.abilities 3
-    | _ ->
-        Printf.printf "Not an option.\n";
-        raise Not_found
-  in
-  match ab with
-  | None ->
-      Printf.printf "No ability.\n";
-      attack char1 char2
-  | Some x -> (
-      match x.effect with
-      | Some e1, Some e2 ->
-          print_endline (char1.name ^ " " ^ e1.description);
-          ( ability_action char1 e1.effect,
-            (print_endline (char2.name ^ " " ^ e2.description);
-             ability_action char2 e2.effect) )
-      | Some e1, None ->
-          print_endline (char1.name ^ " " ^ e1.description);
-          (ability_action char1 e1.effect, char2)
-      | None, Some e2 ->
-          ( char1,
-            (print_endline (char2.name ^ " " ^ e2.description);
-             ability_action char2 e2.effect) )
-      | None, None -> (char1, char2))
+and apply_new_effect (character : battle_character) (effect : effect) : battle_character =
+  let rec app_aux (character : battle_character) (impacts : (effect_type * int) list) : battle_character =
+    match impacts with
+    | [] -> character
+    | (Damage amt, n)::t -> Printf.printf "%s : HP : %n -> %n took %n damage from the attack!\n" (fst character).name ((fst (fst character).health)) ((fst (fst character).health) - amt) amt; app_aux ((change_hp (-amt) (fst character)), if (n - 1) > 0 then (Damage amt, n - 1) :: (snd character) else (snd character)) t
+    | (TurnSkip s, n)::t -> app_aux (fst character, if n > 0 then (TurnSkip s, n + 1) :: (snd character) else (snd character)) t
+    | (Debuff d, n):: t -> app_aux (fst character, if n > 0 then (Debuff d, n) :: (snd character) else (snd character)) t
+    | (Buff b, n):: t -> app_aux (fst character, if n > 0 then (Buff b, n) :: (snd character) else (snd character)) t
+    | _ -> failwith "Todo"
+  in app_aux character (effect.effect)
 
-let rec items (char1 : character) : character =
-  let choice =
-    if char1.host = Computer then Random.int (List.length char1.inventory) + 1
-    else read_int (get_user_choice (print_inventory char1))
-  in
-  let item =
-    if List.length char1.inventory = 0 then (
-      print_endline "Inventory empty!\n";
-      raise Not_found)
-    else List.nth char1.inventory (choice - 1)
-  in
+
+and apply_old_effects (character : battle_character) : battle_character =
+  let rec app_aux (character : character) (effects : (effect_type * int) list) (remaining : (effect_type * int) list) : battle_character= 
+    match effects with
+    | [] -> (character, remaining)
+    | (Damage amt, n)::t -> Printf.printf "%s : HP : %n -> %n took %n damage from a previous attack!\n" character.name (fst character.health - amt) (fst character.health) amt; app_aux (change_hp (-amt) character) t (if (n - 1) > 0 then (Damage amt, n - 1) :: remaining else remaining)
+    | (TurnSkip s, n)::t ->  app_aux character t (if n - 1 > 0 then (TurnSkip s, (n - 1)) :: remaining else remaining)
+    | (Debuff d, n) :: t -> app_aux character t (if (n - 1) > 0 then (Debuff d, n - 1) :: remaining else remaining)
+    | (Buff b, n):: t -> app_aux character t (if (n - 1) > 0 then (Buff b, n - 1) :: remaining else remaining)
+    | _ -> failwith "Todo"
+  in app_aux (fst character) (snd character) []
+
+and has_requirement (user : character) (required : (string * int) list) : bool = 
+  match required with
+  | [] -> true
+  | (rstr, rrtg)::t -> (
+      match List.find_opt (fun (str, rtg) -> (rstr = str) && (rrtg >= rtg)) user.skills with
+      | None -> false
+      | Some _ -> has_requirement user t)
+
+and is_skipped (curr_effects : (effect_type * int) list) : bool =
+  match (List.find_opt (fun (effect, _) -> match effect with TurnSkip _ -> true | _ -> false) (curr_effects)) with
+  | Some (TurnSkip s, _) -> if (Random.int 100) + 1<= s then true else false
+  | None -> false
+  | _ -> false
+
+and use_item (character : battle_character) (item : item) : battle_character =
   match item.category with
-  | Consumable (hp_increase, _) ->
-      let _, updated_char = Character.remove_item item char1 in
-      print_endline
-        (char1.name ^ " has used " ^ item.name ^ ". "
-       ^ "Character's health has increased by " ^ string_of_int hp_increase
-       ^ "!\n");
-      Character.change_hp hp_increase updated_char
-  | _ ->
-      Printf.printf "We can't use this item during battle. \n";
-      items char1
+  | Consumable (hp, _) -> let inc = if hp + (fst (fst character).health) > (snd (fst character).health) then (snd (fst character).health) - (fst (fst character).health) else hp in
+                          Printf.printf "%s : HP : %n -> %n consumed some %s!\n" (fst character).name (fst (fst character).health) (fst (fst character).health + inc) item.name;
+                          (snd (remove_item item (change_hp inc (fst character))), snd character)
+  | _ -> failwith "Can't use that here!"
 
-let flee (char1 : character) : character =
-  if Random.int 1000 < 25 then raise Not_found
-  else (
-    print_endline "Failed to flee battle!";
-    char1)
+let rec attack (state : state) (n : int) : state =
+  let (er, ee, comp) = match state with
+  | (user, User, opp) -> (*clear_lines 7;*) (user, opp, User)
+  | (user, Opponent, opp) -> (opp, user, Opponent)
+  | _ -> failwith "Shouldn't be here"
+  in match (List.nth_opt (fst er).abilities (n - 1)) with
+    | Some (Some ability) ->(
+        match use_ability er ee ability with
+        | Some (er', ee') -> if comp = User then (er', Opponent, ee') else (ee', User, er')
+        | None -> Printf.printf ("%s does not have sufficient ability to do this.\n") (fst er).name; state)
+    | _ -> Printf.printf ("No ability.\n"); state
 
-let rec move (char1 : character) (char2 : character) : character * character =
-  let move_options =
-    "Select an option (1-3):\n 1. Attack\n 2. Items\n 3. Flee\n"
-  in
-  let choice =
-    if char1.host = Computer then Random.int 2 + 1
-    else read_int (get_user_choice move_options)
-  in
-  match choice with
-  | 1 -> (
-      try
-        print_endline (char1.name ^ " has started an attack!");
-        attack char1 char2
-      with Not_found -> attack char1 char2)
-  | 2 -> (
-      try
-        let updated_char = items char1 in
-        (updated_char, char2)
-      with _ ->
-        print_endline "Can't get item.";
-        move char1 char2)
-  | 3 -> (
-      try (flee char1, char2) with
-      | Not_found ->
-          raise (Invalid_argument (char1.name ^ " has fled the battle!"))
-      | _ -> (char1, char2))
-  | _ ->
-      Printf.printf "Not a option. \n";
-      move char1 char2
+and item (character : battle_character) (n : int) : battle_character = 
+  match List.nth_opt (fst character).inventory (n - 1) with
+  | Some i -> use_item character i
+  | None -> Printf.printf "No item used!\n"; character
+  
+and flee (env: env) : env = 
+  match (Random.int 1000) < 25 with
+  | true -> (
+      match List.hd env with
+      | (user, User, opp) -> (user, End Opponent, opp) :: env
+      | (user, Opponent, opp) -> (user, End User, opp) :: env
+      | _ -> raise (Invalid_argument "Unreachable"))
+  | false -> (
+      match List.hd env with
+      | (user, User, opp) -> Printf.printf "%s failed to flee!\n" (fst user).name; turn ((user, Opponent, opp) :: env)
+      | (user, Opponent, opp) -> Printf.printf "%s failed to flee!\n" (fst opp).name; turn ((user, User, opp) :: env)
+      | _ -> raise (Invalid_argument "Unreachable")
+  )
 
-let battle (char1 : character) (char2 : character) : character =
-  let rec battle_progression (player1 : character) (player2 : character)
-      (turns : int) : character =
-    let updated_player1, updated_player2 =
-      print_endline
-        ("\nTurn: "
-        ^ string_of_int (turns / 2)
-        ^ " (" ^ player1.name ^ ")\n" ^ player1.name ^ "'s health: "
-        ^ (let x, _ = player1.health in
-           string_of_int x)
-        ^ "\n" ^ player2.name ^ "'s health: "
-        ^ (let x, _ = player2.health in
-           string_of_int x)
-        ^ "\n");
-      move player1 player2
-    in
-    if updated_player1.status = Alive && updated_player2.status = Alive then
-      battle_progression updated_player2 updated_player1 (turns + 1)
-    else if updated_player1.host = User then (
-      Printf.printf "Finished battle! ";
-      updated_player1)
-    else (
-      Printf.printf "Finished battle! ";
-      updated_player2)
-  in
-  Printf.printf "Begin battle!\n";
-  battle_progression char1 char2 2
+and turn (env : env) : env = 
+  match List.hd env with
+  | (user, User, opp) -> (*Graphics.battle "main" (fst user) (fst opp);*) Printf.printf "\n%s's Turn\n" (fst user).name; let user' = apply_old_effects user in
+      if fst (fst user').health <= 0 then (user', End Opponent, opp)::env else
+        if is_skipped (snd user') then
+          (Printf.printf "%s : HP -> %n is out for the round!\n" (fst user).name (fst (fst user).health); turn ((user', Opponent, opp)::env)) 
+        else 
+          let turn_options = "Select an option (1 - 3):\n 1. Attack\n 2. Items \n 3. Flee\n" in (
+            match read_int (get_user_choice turn_options) with
+            | 1 -> (*clear_lines 6;*) print_endline ((fst user').name ^ " chose to attack!");  
+                  turn ((attack (user', User, opp) (read_int (get_user_choice (print_abilities (fst user))))) :: env)
+            | 2 -> (*clear_lines 6;*) print_endline ((fst user').name ^ " is getting an item!"); let user' = item user (read_int (get_user_choice (print_inventory (fst user)))) in turn ((user', User, opp) :: env)
+            | 3 -> (*clear_lines 6;*) print_endline ((fst user').name ^ " is attempting to flee!"); flee env
+            | _ -> turn env;) 
+  | (user, Opponent, opp) -> (*Graphics.battle "main" (fst user) (fst opp);*) let opp' = apply_old_effects opp in 
+      if fst (fst opp').health <= 0 then (user, End User, opp')::env else  
+        if is_skipped (snd opp') then turn ((user, User, opp')::env) else (
+          match (Random.int 50) + 1 with
+          | x when x <= 30 -> Printf.printf "\n%s's Turn\n" (fst opp).name; print_endline ((fst opp').name ^ " chose to attack!"); 
+                turn ((attack (user, Opponent, opp') ((Random.int 4) + 1)) :: env)
+          | x when x <= 45-> let len = List.length (fst opp).inventory in if len > 0 then
+                 (Printf.printf "\n%s's Turn\n" (fst opp).name;
+                 print_endline ((fst opp').name ^ " is getting an item!");
+                 let opp' = item opp ((Random.int len) + 1) in turn ((user, Opponent, opp') :: env)) 
+                else turn env
+          | _ -> Printf.printf "\n%s's Turn\n" (fst opp).name; print_endline ((fst opp').name ^ " is attempting to flee!"); flee env)
+  | (_, End _, _) -> env
+
+  let battle (user : character) (opp : character) : state = 
+    List.hd (turn [((user, []), User, (opp, []))])

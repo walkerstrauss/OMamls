@@ -103,50 +103,22 @@ let namePrint name rowSpace =
     name ^ spaceGenerator (rowSpace - String.length name)
   else String.sub name 0 (rowSpace - 4) ^ "..."
 
-let battle state p1 p2 =
-  match state with
-  | "main" ->
-      header (title (p1.name ^ " is battling " ^ p2.name ^ "!"));
-      printf "x | [1] -> %s|         |  [1] -> %s| x" (namePrint p1.name 34)
-        (namePrint p2.name 34);
-      printf "x |        %s|         |         %s| x"
-        (namePrint (progressBar (fst p1.health) (snd p1.health)) 34)
-        (namePrint (progressBar (fst p2.health) (snd p2.health)) 34);
-      printf
-        "x |                                          |         \
-         |                                          | x";
-      printf
-        "x |                                          |         \
-         |------------------------------------------| x";
-      printf
-        "x |                                          |         | <1> \
-         Abilities       | <3> Flee           | x";
-      printf
-        "x |                                          |         | <2> \
-         Inventory       | <CTRL-D> Quit      | x";
-      footer (title "OMaml's Test")
-  | "abilities" ->
-      header (title "Checking the arsenal!");
-      printf "x | [1] -> %s|         |  [1] -> %s| x" (namePrint p1.name 34)
-        (namePrint p2.name 34);
-      printf "x |        %s|         |         %s| x"
-        (namePrint (progressBar (fst p1.health) (snd p1.health)) 34)
-        (namePrint (progressBar (fst p2.health) (snd p2.health)) 34);
-      printf
-        "x |                                          |         \
-         |                                          | x";
-      printf
-        "x |                                          |         \
-         |------------------------------------------| x";
-      printf
-        "x |                                          |         | <1> %s| <3> \
-         %s| x"
-        (namePrint (List.nth (abilities_to_list p1) 0) 18)
-        (namePrint (List.nth (abilities_to_list p1) 3) 18);
-      printf
-        "x |                                          |         | <2> %s| <4> \
-         %s| x"
-        (namePrint (List.nth (abilities_to_list p1) 2) 18)
-        (namePrint (List.nth (abilities_to_list p1) 4) 18);
-      footer (title "OMaml's Test")
+let battle state p1 p2 = 
+  Helper.clear_terminal();match state with
+  | "main" -> header (title(p1.name ^ " is battling " ^ p2.name ^ "!"));
+  printf "x |                                          |         |                                          | x\n";
+  printf "x |                                          |         |                                          | x\n";
+  printf "x |                                          |         |                                          | x\n";
+  printf "x |-----------------------------------------------------------------------------------------------| x\n";
+  printf "x | [U] -> %s|         | <1> Abilities       | <3> Flee           | x\n" (namePrint (p1.name ^ " " ^ (progressBar (fst p1.health) (snd p1.health)))  54); 
+  printf "x | [O] -> %s|         | <2> Inventory       | <CTRL-D> Quit      | x\n" (namePrint (p2.name ^ " " ^ (progressBar (fst p2.health) (snd p2.health)))  54); 
+              footer (title "OMaml's Test");
+  | "abilities" -> header (title "Checking the arsenal!");
+                    printf "x | [1] -> %s|         |  [1] -> %s| x" (namePrint p1.name 34) (namePrint p2.name 34);
+                    printf "x |        %s|         |         %s| x" (namePrint (progressBar (fst p1.health) (snd p1.health)) 34) (namePrint (progressBar (fst p2.health) (snd p2.health)) 34);
+                    printf "x |                                          |         |                                          | x";
+                    printf "x |                                          |         |------------------------------------------| x";
+                    printf "x |                                          |         | <1> %s| <3> %s| x" (namePrint (List.nth (abilities_to_list p1) 0)  18) (namePrint (List.nth (abilities_to_list p1) 3) 18);
+                    printf "x |                                          |         | <2> %s| <4> %s| x" (namePrint (List.nth (abilities_to_list p1) 2) 18) (namePrint (List.nth (abilities_to_list p1) 4) 18);
+                    footer (title "OMaml's Test");
   | _ -> failwith "This state is not found"

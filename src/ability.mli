@@ -20,33 +20,34 @@ type effect_type =
       probability out of 100*)
   | AddItem (*Add item to a players inventory*)
   | RemoveItem (*Remove item from a players inventory*)
-
-type effect = {
-  name : string;
-  description : string;
-  effect : (effect_type * int) list;
-}
+  
+  
 (**Record of the effect with its name
     its description is what will be said when used
     and a list of the types of effects the action does*)
+type effect = {
+    description : string;
+    effect : (effect_type * int) list;
+}
 
+(**Record of the ability with its name,
+    the skills required to use and obtain the ability
+    and a pair of who the ability affects and what the actual effect is*)
 type ability = {
   name : string;
   required : (string * int) list;
   effect : effect option * effect option;
 }
-(**Record of the ability with its name,
-    the skills required to use and obtain the ability
-    and a pair of who the ability affects and what the actual effect is*)
 
-val create_ability :
-  string -> (string * int) list -> effect option * effect option -> ability
 (**Function that creates an ability with the inputs
     Returns an ability*)
+val create_ability :
+  string -> (string * int) list -> effect option * effect option -> ability
 
-val create_effect : string -> string -> (effect_type * int) list -> effect
 (**Function that creates an effect with the inputs
     Returns an effect*)
+val create_effect : string -> (effect_type * int) list -> effect
 
-val abilities : ability list
 (**List of possible abilities a player can have*)
+val abilities : ability list
+
