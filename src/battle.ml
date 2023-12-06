@@ -8,10 +8,10 @@ type battle_character = (character * (effect_type * int) list)
 type state = (battle_character * turn * battle_character) 
 type env = state list
 
-let get_user_choice (message : string) = 
-  print_endline (message);
-  print_string "> ";;
-
+let get_user_choice (message : string) =
+  print_endline message;
+  print_string "> "
+  
 let print_abilities (character : character) : string =
   let print_ability (ability : ability option) : string =
     match ability with 

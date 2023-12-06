@@ -15,12 +15,15 @@ type env = state list
 
 (** Prints out a message, and requests for the User to make a choice.*)
 val get_user_choice : string -> unit
+(** Prints out a message, and requests for the User to make a choice.*)
 
-(** Creates a message string of the list of abilities the character has currently to be used to attack.*)
 val print_abilities : character -> string
+(** Creates a message string of the list of abilities the character has 
+    currently to be used to attack.*)
 
-(** Creates a message string of the list of items the character has currently to be used during battle. *)
 val print_inventory : character -> string
+(** Creates a message string of the list of items the character has currently 
+    to be used during battle. *)
 
 (** Checks the selected ability's action and applies all the effects of the ability onto the character.
     Currently, Debuff and Buff hasn't been fully implementated, as skills haven't been implemented. 

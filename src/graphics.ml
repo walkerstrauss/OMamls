@@ -1,37 +1,55 @@
 open Printf
 open Character
 
-let rec strGenerator n str acc = 
-  if n = 0 then acc else
-    strGenerator (n-1) str (acc ^ str)
+let rec strGenerator n str acc =
+  if n = 0 then acc else strGenerator (n - 1) str (acc ^ str)
 
-let spaceGenerator n = 
-  strGenerator n " " "" 
+let spaceGenerator n = strGenerator n " " ""
 
-let title x = let len = (94 - String.length x) in
+let title x =
+  let len = 94 - String.length x in
   match len mod 2 with
-  | 1 -> printf "x |%s%s%s| x \n" (spaceGenerator ((len/2) + 1)) x (spaceGenerator (len/2))
-  | _ -> printf "x |%s%s%s| x \n" (spaceGenerator (len/2)) x (spaceGenerator (len/2))
+  | 1 ->
+      printf "x |%s%s%s| x \n"
+        (spaceGenerator ((len / 2) + 1))
+        x
+        (spaceGenerator (len / 2))
+  | _ ->
+      printf "x |%s%s%s| x \n"
+        (spaceGenerator (len / 2))
+        x
+        (spaceGenerator (len / 2))
 
 let progressBar value max_value =
-  if value > max_value then failwith "Value cannot be greater than max value" else
-  let percentage = int_of_float (Float.round ((float_of_int value /. float_of_int max_value) *. 10.)) in 
-    let hp = strGenerator percentage ("█") ("") in
-      let mhp = strGenerator (10 - percentage) ("▒") ("") in
-        hp ^ mhp
-    
-let header text = 
-  printf "+--------------------------------------------------------------------------------------------------+ \n";
+  if value > max_value then failwith "Value cannot be greater than max value"
+  else
+    let percentage =
+      int_of_float
+        (Float.round (float_of_int value /. float_of_int max_value *. 10.))
+    in
+    let hp = strGenerator percentage "█" "" in
+    let mhp = strGenerator (10 - percentage) "▒" "" in
+    hp ^ mhp
+
+let header text =
+  printf
+    "+----------------------------------------------------------------------\n\
+    \    ----------------------------+ \n";
   text;
-  printf "x==================================================================================================x \n";;
+  printf
+    "x====================================================================\n\
+    \    ==============================x \n"
 
 let footer text =
-  printf "x==================================================================================================x \n";
+  printf
+    "x==================================================================\n\
+    \    ================================x \n";
   text;
-  printf "+--------------------------------------------------------------------------------------------------+ \n";;
+  printf
+    "+------------------------------------------------------\n\
+    \    --------------------------------------------+ \n"
 
-
-(*let instore name currScreen currency items storeName = 
+(*let instore name currScreen currency items storeName =
   match currScreen with
   | "Main" ->
       header ("Welcome to " ^ storeName);
@@ -42,8 +60,9 @@ let footer text =
       printf "x |                                                                                              | x \n";
       printf "x |                                                  3. Flee                                     | x \n";
       printf "x |                                                                                              | x \n";
-      printf "+--------------------------------------------------------------------------------------------------+ \n";
-  | "Buy" -> 
+      printf "+---------------------------------------------------------------
+      -----------------------------------+ \n";
+  | "Buy" ->
     header ("Welcome to " ^ storeName);
       printf "x | [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅] : 0                                                                                 | x \n";
       printf "x |                                                  1. Abilities                                | x \n";
@@ -52,7 +71,8 @@ let footer text =
       printf "x |                                                                                              | x \n";
       printf "x |                                                  3. Flee                                     | x \n";
       printf "x |                                                                                              | x \n";
-      printf "+--------------------------------------------------------------------------------------------------+ \n";
+      printf "+----------------------------------------------------------
+      ----------------------------------------+ \n";
   | "Sell" ->
     header ("Welcome to " ^ storeName);
       printf "x | [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅] : 0                                                                                 | x \n";
@@ -62,26 +82,26 @@ let footer text =
       printf "x |                                                                                              | x \n";
       printf "x |                                                  3. Flee                                     | x \n";
       printf "x |                                                                                              | x \n";
-      printf "+--------------------------------------------------------------------------------------------------+ \n";
+      printf "+--------------------------------------------------------
+      ------------------------------------------+ \n";
   | _ -> failwith "Store doesn't have this screen"
 *)
 
 (* let character_creation state input =
-  match state with
-  | "name" ->
-    header (title "What shall we call you?");
-  | "major" ->
-    header (title "What is your intended major");
-  | "confirmation" ->
-    header (title "Are you happy with yourself?");
-  | _ -> failwith "This state does not exist"
- *)
-
-
+   match state with
+   | "name" ->
+     header (title "What shall we call you?");
+   | "major" ->
+     header (title "What is your intended major");
+   | "confirmation" ->
+     header (title "Are you happy with yourself?");
+   | _ -> failwith "This state does not exist"
+*)
 
 let namePrint name rowSpace =
-  if String.length name < rowSpace then name ^ spaceGenerator (rowSpace - String.length name) 
-  else (String.sub name 0 (rowSpace - 4)) ^ "..." 
+  if String.length name < rowSpace then
+    name ^ spaceGenerator (rowSpace - String.length name)
+  else String.sub name 0 (rowSpace - 4) ^ "..."
 
 let battle state p1 p2 = 
   Helper.clear_terminal();match state with
@@ -102,4 +122,3 @@ let battle state p1 p2 =
                     printf "x |                                          |         | <2> %s| <4> %s| x" (namePrint (List.nth (abilities_to_list p1) 2) 18) (namePrint (List.nth (abilities_to_list p1) 4) 18);
                     footer (title "OMaml's Test");
   | _ -> failwith "This state is not found"
-  

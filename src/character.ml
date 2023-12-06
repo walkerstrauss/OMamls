@@ -7,7 +7,6 @@ type major = CS | ECE | MechE | ChemE | CivilE | IS
 (**Character status type*)
 type status = Alive | Dead
 
-(**Character type*)
 type character = {
   name : string;
   health : int * int;
@@ -19,8 +18,10 @@ type character = {
   status : status;
   brbs : int;
 }
+(** Character type*)
 
-(**Helper function that creates a string with the required amount of abilities*)
+(** Helper function that creates a string with the required amount of
+    abilities *)
 let rec abilities_list amt acc =
   match amt with
   | 0 -> acc
@@ -37,17 +38,22 @@ let create name major ability_amt max_hp brbs = {
   inventory = []; 
   status = Alive;
   brbs = brbs;
-  }
+ }
 
-(**Rename the character *)
-let rename name character = if String.length (String.trim name) = 0 then {character with name = "Untitled"} else {character with name = name}
+(** Rename the character *)
+let rename name character =
+  if String.length (String.trim name) = 0 then
+    { character with name = "Untitled" }
+  else { character with name }
 
-(**Generate a random character*)
-let generate (first, last) majors skills abilities items difficulty = 
+(** Generate a random character. *)
+let generate (first, last) majors skills abilities items difficulty =
   Random.self_init ();
-  let name = List.nth first (Random.full_int (List.length first)) ^
-   " " ^ 
-   List.nth last (Random.full_int (List.length last)) in
+  let name =
+    List.nth first (Random.full_int (List.length first))
+    ^ " "
+    ^ List.nth last (Random.full_int (List.length last))
+  in
   let major = List.nth majors (Random.full_int (List.length majors)) in
   let skills = let rec skill_select s acc =
     if List.length s = 0 then acc else 
@@ -98,37 +104,65 @@ let remove_item item character =
   | Some i -> (Some i, {character with inventory = List.find_all (fun x -> x <> i) character.inventory})
   | None -> (None, {character with inventory = character.inventory})
 
-(**Add an ability to the character's repertoire of abilities*)
-let add_ability ability character = 
-  match List.length (List.find_all (fun x -> x != None) character.abilities) with
+(** Add an ability to the character's repertoire of abilities*)
+let add_ability ability character =
+  match
+    List.length (List.find_all (fun x -> x != None) character.abilities)
+  with
   | len when len >= 4 -> failwith "Must Overwrite an Ability"
-  | _ -> {character with abilities = 
-            List.find_all 
-              (fun x -> x != None) 
-              character.abilities @ [Some ability] @ List.tl 
-                                                      (List.filter 
-                                                        (fun x -> x = None) 
-                                                        character.abilities)}
+  | _ ->
+      {
+        character with
+        abilities =
+          List.find_all (fun x -> x != None) character.abilities
+          @ [ Some ability ]
+          @ List.tl (List.filter (fun x -> x = None) character.abilities);
+      }
 
-(**Overwrite an ability in the character's repertoire of abilities*)
+(** Overwrite an ability in the character's repertoire of abilities*)
 let overwrite_ability ability overwrite character =
   match List.find_opt (fun x -> x = Some overwrite) character.abilities with
-  | Some _ -> {character with abilities = (List.find_all (fun x -> x != Some overwrite) character.abilities) @ [Some ability]}
+  | Some _ ->
+      {
+        character with
+        abilities =
+          List.find_all (fun x -> x != Some overwrite) character.abilities
+          @ [ Some ability ];
+      }
   | None -> failwith "This Ability could not be found!"
 
-(**Update a skill by adding sp to it or create a skill with sp as the initial value*)
+(** Update a skill by adding sp to it or create a skill with sp as the initial
+    value*)
 let update_skill sp skill character =
-  match List.find_opt (fun x -> let y, _ = x in y = skill) character.skills with
-  | Some (name, level) -> {character with skills = (name, level + sp) :: List.filter (fun x -> let y,_ = x in y <> skill) character.skills}
-  | None -> {character with skills = (skill, sp) :: character.skills}
+  match
+    List.find_opt
+      (fun x ->
+        let y, _ = x in
+        y = skill)
+      character.skills
+  with
+  | Some (name, level) ->
+      {
+        character with
+        skills =
+          (name, level + sp)
+          :: List.filter
+               (fun x ->
+                 let y, _ = x in
+                 y <> skill)
+               character.skills;
+      }
+  | None -> { character with skills = (skill, sp) :: character.skills }
 
-(**Convert the abilities that a character has to a list of strings with the name of the abilities*)
+(** Convert the abilities that a character has to a list of strings with the 
+    name of the abilities*)
 let abilities_to_list character =
   let rec converter character n acc =
     match n with
-    | n when n < 4 -> 
-      (match List.nth character.abilities n with
-      | Some x -> acc @ [x.name]
-      | None -> acc @ [""])
+    | n when n < 4 -> (
+        match List.nth character.abilities n with
+        | Some x -> acc @ [ x.name ]
+        | None -> acc @ [ "" ])
     | _ -> acc
-    in converter character (List.length character.abilities) []
+  in
+  converter character (List.length character.abilities) []
