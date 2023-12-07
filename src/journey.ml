@@ -1,4 +1,4 @@
-type time = Int * Int 
+type time = int * int 
 
 type weekday = 
   | Monday 
@@ -11,6 +11,6 @@ type weekday =
 
 type day = weekday * time
 
-type week = Int * day list
+type week = int * day list
 
 type semester = week list
