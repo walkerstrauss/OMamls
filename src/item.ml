@@ -6,23 +6,17 @@ type category =
 
 type item = { name : string; description : string; category : category }
 
+let make_item name description category = { name; description; category }
+
 let consumables_catelog =
   [
-    {
-      name = "Iced Tea";
-      description = "Ice Cold Delicious Beverage. Heals 20 health.";
-      category = Consumable (20, 4);
-    };
-    {
-      name = "Lolipops";
-      description = "Sweet and savory. Heals 10 health.";
-      category = Consumable (10, 4);
-    };
-    {
-      name = "Cornell Dairy Ice Cream";
-      description = "Legally speaking, this is butter. Heals 25 health.";
-      category = Consumable (25, 5);
-    };
+    make_item "Iced Tea" "Ice Cold Delicious Beverage. Heals 20 Health"
+      (Consumable (20, 4));
+    make_item "Lollipops" "Sweet and savory. Heals 10 health."
+      (Consumable (10, 4));
+    make_item "Cornell Dairy Ice Cream"
+      "Legally speaking, this is butter. Heals 25 health."
+      (Consumable (25, 5));
     {
       name = "CELSIUS Sparkling Energy Drink";
       description = "Elixir of life for a Cornell engineer. Heals 15 health.";
@@ -38,46 +32,29 @@ let consumables_catelog =
 
 let supplies_catelog =
   [
-    {
-      name = "Cornell ID";
-      description = "Your very own ID card! Keep it with you at all times.";
-      category = Supplies ("placeholder", None);
-    };
-    {
-      name = "Canada Goose Jacket";
-      description =
-        "Unnecessarily expensive jacket to withstand the cold. \n\
-        \        Made from real geese!";
-      category = Supplies ("placeholder", None);
-    };
-    {
-      name = "Adderall XR 20mg";
-      description = "A very rare commodity due to the National shortage!";
-      category = Supplies ("placeholder", None);
-    };
+    make_item "Cornell ID"
+      "Your very own ID card! Keep it with you at all times."
+      (Supplies ("placeholder", None));
+    make_item "Canada Goose Jacket"
+      "Unnecessarily expensive jacket to withstand the cold. Made from real \
+       geese!"
+      (Supplies ("placeholder", None));
+    make_item "Adderall XR 20mg"
+      "A very rare commodity due to the National shortage!"
+      (Supplies ("placeholder", None));
   ]
 
 let tech_catelog =
   [
-    {
-      name = "iPad with Apple Pencil";
-      description = "Because you're too good for paper.";
-      category = Tech ("placeholder", None);
-    };
-    {
-      name = "MacBook Pro";
-      description = "Expensive laptop.";
-      category = Tech ("placeholder", None);
-    };
+    make_item "iPad with Apple Pencil" "Because you're too good for paper."
+      (Tech ("placeholder", None));
+    make_item "MacBook Pro" "Expensive laptop." (Tech ("placeholder", None));
   ]
 
 let misc_catelog =
   [
-    {
-      name = "Poster";
-      description = "From the Cornell Store's poster sale!";
-      category = Tech ("placeholder", None);
-    };
+    make_item "Poster" "From the Cornell Store's poster sale!"
+      (Tech ("placeholder", None));
   ]
 
 let items_catelog =
