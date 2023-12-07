@@ -32,14 +32,39 @@ let add_time (old_time : time) (duration : time) : time =
   | i when i>59 -> (hour+dur_hour+1, minute+dur_minute-60)
   | _ -> (hour+dur_hour, minute+dur_minute)
 
-let morrison_hall : location = {place=(Dorm (North, "Toni Morrison Hall")); events=[];}
+let sleep_in : event = {name="Sleep in (1 hour)"; duration=(1,0); skill_effect=[("Smartness", 0);("Happiness", 10)]}
+let morrison_hall : location = {place=(Dorm (North, "Toni Morrison Hall")); events=[sleep_in];}
+
+let print_events_options (lst: event list): string = 
+  let init = 
+    "Please select the following options (1 - "
+    ^ string_of_int (List.length lst)
+    ^ "):\n" 
+  in 
+  let rec events_print (events: event list) (count: int): string =
+    match events with 
+    | [] -> ""
+    | h :: t -> ((string_of_int count) ^ ": " ^ (h.name) ^ "\n" ^ (events_print t (count + 1)))
+  in init ^ events_print lst 1
+
+let get_user_choice (message : string) =
+  print_endline message;
+  print_string "> "
+
+let rec read_int_rec x : int =
+  try
+    let ln = read_line x in
+    int_of_string (String.trim ln)
+  with Failure _ -> read_int_rec x
 
 let day (char1 : character) (week : int) =
   let rec events (location : location) (time : time) = 
     (*print out time and current skill levels*)
     print_endline("The time is " ^ (print_time time) ^ ". " ^ "What would you like to do?");
     (*access current location, give options for which events are available*)
-
+    let opt = read_int_rec (get_user_choice (print_events_options location.events)) in
+    let event = List.nth location.events (opt-1) in 
+    let time = add_time time (event.duration) in
     (*run specified event, updating skills accordingly and adding to the time*)
 
     (*if time is past midnight, stop giving option for more events (stop calling recursively)*)
