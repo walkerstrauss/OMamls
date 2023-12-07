@@ -1,6 +1,16 @@
-type event = Idle | Travel | Battle of Battle.env
-type day = Weekend of event list | Weekday of event list
-type week = day list
+type time = Int * Int 
+
+type weekday = 
+  | Monday 
+  | Tueday 
+  | Wednesday
+  | Thursday 
+  | Friday 
+  | Saturday
+  | Sunday
+
+type day = weekday * time
+
+type week = Int * day list
+
 type semester = week list
-type year = semester * semester
-type career = year list
