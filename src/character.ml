@@ -180,3 +180,13 @@ let abilities_to_list character =
     | [] -> []
   in
   converter character.abilities
+
+let rec has_skills (user : character) (required : (string * int) list) : bool =
+  match required with
+  | [] -> true
+  | (rstr, rrtg) :: t -> (
+      match
+        List.find_opt (fun (str, rtg) -> rstr = str && rrtg >= rtg) user.skills
+      with
+      | None -> false
+      | Some _ -> has_skills user t)
