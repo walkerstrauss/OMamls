@@ -46,7 +46,9 @@ let rename name character =
   else { character with name }
 
 (** Generate a random character. *)
-let generate (first, last) majors skills abilities items difficulty =
+let generate ((first, last) : string list * string list) (majors : major list)
+    (skills : string list) (abilities : ability list) (items : item list)
+    (difficulty : int) : character =
   Random.self_init ();
   let name =
     List.nth first (Random.full_int (List.length first))
@@ -118,41 +120,42 @@ let add_item item character =
 
 (**Remove an item from the character's inventory*)
 let remove_item item character =
-  match List.find_opt (fun x -> x = item) character.inventory with
-  | Some i ->
-      ( Some i,
-        {
-          character with
-          inventory = List.find_all (fun x -> x <> i) character.inventory;
-        } )
-  | None -> (None, { character with inventory = character.inventory })
+  let rec remove_aux item inventory =
+    match inventory with
+    | [] -> (None, inventory)
+    | h :: t ->
+        if h = item then (Some h, t)
+        else
+          let rem, inv' = remove_aux item t in
+          (rem, h :: inv')
+  in
+  let item', inventory' = remove_aux item character.inventory in
+  (item', { character with inventory = inventory' })
 
 (** Add an ability to the character's repertoire of abilities*)
 let add_ability ability character =
-  match
-    List.length (List.find_all (fun x -> x != None) character.abilities)
-  with
-  | len when len >= 4 -> failwith "Must Overwrite an Ability"
-  | _ ->
-      {
-        character with
-        abilities =
-          List.find_all (fun x -> x != None) character.abilities
-          @ [ Some ability ]
-          @ List.tl (List.filter (fun x -> x = None) character.abilities);
-      }
+  let rec add_aux abilities =
+    match abilities with
+    | Some x :: t -> Some x :: add_aux t
+    | None :: t -> Some ability :: t
+    | [] ->
+        Printf.printf "Must override an ability";
+        []
+  in
+  let abilities' = add_aux character.abilities in
+  { character with abilities = abilities' }
 
 (** Overwrite an ability in the character's repertoire of abilities*)
 let overwrite_ability ability overwrite character =
-  match List.find_opt (fun x -> x = Some overwrite) character.abilities with
-  | Some _ ->
-      {
-        character with
-        abilities =
-          List.find_all (fun x -> x != Some overwrite) character.abilities
-          @ [ Some ability ];
-      }
-  | None -> failwith "This Ability could not be found!"
+  let rec overwrite_aux abilities =
+    match abilities with
+    | Some x :: t ->
+        if x = overwrite then Some ability :: t else Some x :: overwrite_aux t
+    | None :: t -> Some ability :: t
+    | [] -> []
+  in
+  let abilities' = overwrite_aux character.abilities in
+  { character with abilities = abilities' }
 
 (** Update a skill by adding sp to it or create a skill with sp as the initial
     value*)
@@ -180,12 +183,10 @@ let update_skill sp skill character =
 (** Convert the abilities that a character has to a list of strings with the 
     name of the abilities*)
 let abilities_to_list character =
-  let rec converter character n acc =
-    match n with
-    | n when n < 4 -> (
-        match List.nth character.abilities n with
-        | Some x -> acc @ [ x.name ]
-        | None -> acc @ [ "" ])
-    | _ -> acc
+  let rec converter (abilities : ability option list) =
+    match abilities with
+    | Some x :: t -> x.name :: converter t
+    | None :: t -> converter t
+    | [] -> []
   in
-  converter character (List.length character.abilities) []
+  converter character.abilities
