@@ -160,25 +160,15 @@ let overwrite_ability ability overwrite character =
 (** Update a skill by adding sp to it or create a skill with sp as the initial
     value*)
 let update_skill sp skill character =
-  match
-    List.find_opt
-      (fun x ->
-        let y, _ = x in
-        y = skill)
-      character.skills
-  with
-  | Some (name, level) ->
-      {
-        character with
-        skills =
-          (name, level + sp)
-          :: List.filter
-               (fun x ->
-                 let y, _ = x in
-                 y <> skill)
-               character.skills;
-      }
-  | None -> { character with skills = (skill, sp) :: character.skills }
+  let rec update_aux skills =
+    match skills with
+    | [] -> (skill, sp) :: []
+    | (name, points) :: t ->
+        if name = skill then (name, points + sp) :: t
+        else (name, points) :: update_aux t
+  in
+  let skills' = update_aux character.skills in
+  { character with skills = skills' }
 
 (** Convert the abilities that a character has to a list of strings with the 
     name of the abilities*)

@@ -12,6 +12,12 @@ let get_user_choice (message : string) =
   print_endline message;
   print_string "> "
 
+let rec read_int_rec x : int =
+  try
+    let ln = read_line x in
+    int_of_string (String.trim ln)
+  with Failure _ -> read_int_rec x
+
 let print_abilities (character : character) : string =
   let print_ability (ability : ability option) : string =
     match ability with None -> "No Ability" | Some a -> a.name
@@ -219,20 +225,20 @@ and turn (env : env) : env =
         let turn_options =
           "Select an option (1 - 3):\n 1. Attack\n 2. Items \n 3. Flee\n"
         in
-        match read_int (get_user_choice turn_options) with
+        match read_int_rec (get_user_choice turn_options) with
         | 1 ->
             (*clear_lines 6;*)
             print_endline ((fst user').name ^ " chose to attack!");
             turn
               (attack (user', User, opp)
-                 (read_int (get_user_choice (print_abilities (fst user))))
+                 (read_int_rec (get_user_choice (print_abilities (fst user))))
               :: env)
         | 2 ->
             (*clear_lines 6;*)
             print_endline ((fst user').name ^ " is getting an item!");
             let user' =
               item user
-                (read_int (get_user_choice (print_inventory (fst user))))
+                (read_int_rec (get_user_choice (print_inventory (fst user))))
             in
             turn ((user', User, opp) :: env)
         | 3 ->
