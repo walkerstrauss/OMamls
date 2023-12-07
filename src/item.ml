@@ -8,6 +8,9 @@ type item = { name : string; description : string; category : category }
 
 let make_item name description category = { name; description; category }
 
+let rename_item item name =
+  { name; description = item.description; category = item.category }
+
 let consumables_catelog =
   [
     make_item "Iced Tea" "Ice Cold Delicious Beverage. Heals 20 Health"

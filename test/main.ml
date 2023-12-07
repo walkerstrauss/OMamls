@@ -2,6 +2,7 @@ open OUnit2
 open Omamls
 open Character
 open Ability
+open Item
 
 (** Test Plan:
   Item.ml, Abilities.ml, Character.ml were tested through OUnit, and some functions within battle.ml 
@@ -96,6 +97,31 @@ let character_tests =
   ]
 
 (********************************************************************
+   Item Tests
+ ********************************************************************)
+
+let i1 = Item.make_item "name" "description" (Consumable (20, 4))
+let i2 = Item.make_item "name2" "description2" (Consumable (40, 3))
+
+let item_tests =
+  [
+    ("Test make_item with name" >:: fun _ -> assert_equal "name" i1.name);
+    ( "Test make_item with description" >:: fun _ ->
+      assert_equal "description" i1.description );
+    ( "Test make_item with category" >:: fun _ ->
+      assert_equal (Consumable (20, 4)) i1.category );
+    ("Test make_item with name2" >:: fun _ -> assert_equal "name2" i2.name);
+    ( "Test make_item with description" >:: fun _ ->
+      assert_equal "description2" i2.description );
+    ( "Test make_item with category" >:: fun _ ->
+      assert_equal (Consumable (40, 3)) i2.category );
+    ( "Test rename with name2" >:: fun _ ->
+      assert_equal "Walker" (rename_item i2 "Walker").name );
+    ( "Test rename with name2 part 2" >:: fun _ ->
+      assert_equal "Momo" (rename_item i1 "Momo").name );
+  ]
+
+(********************************************************************
     Ability Tests
   ********************************************************************)
 
@@ -172,6 +198,6 @@ let battle_tests =
 
 let test =
   "Test Suite for OMamls: Cornell RPG"
-  >::: List.flatten [ character_tests; battle_tests; ability_tests ]
+  >::: List.flatten [ character_tests; battle_tests; ability_tests; item_tests ]
 
 let _ = run_test_tt_main test
