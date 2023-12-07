@@ -23,6 +23,17 @@ let consumables_catelog =
       description = "Legally speaking, this is butter. Heals 25 health.";
       category = Consumable (25, 5);
     };
+    {
+      name = "CELSIUS Sparkling Energy Drink";
+      description = "Elixir of life for a Cornell engineer. Heals 15 health.";
+      category = Consumable (15, 6);
+    };
+    {
+      name = "Mattin's Quesadilla";
+      description =
+        "A quesadilla with sour cream, salsa, and guacamole. Heals 30 health.";
+      category = Consumable (30, 8);
+    };
   ]
 
 let supplies_catelog =
