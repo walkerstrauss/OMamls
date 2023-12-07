@@ -9,15 +9,37 @@ open Ability
 
 let char1 = Character.create "Talia" CS 4 100 0
 let char2 = Character.create "" CS 4 100 0
+let chargen1 = Character.generate ([ "John" ], [ "Cena" ]) [ CS ] [] [] [] 3
+let iced_tea = List.hd Item.consumables_catelog
+let cornell_id = List.hd Item.supplies_catelog
+let multichar1 = char1 |> add_item iced_tea
+let multichar2 = char1 |> add_item iced_tea |> add_item iced_tea
+
+let multichar3 =
+  char1 |> add_item iced_tea |> add_item iced_tea |> add_item iced_tea
+
+let multichar4 = char1 |> add_item iced_tea |> add_item cornell_id
+let punch = List.hd Ability.abilities
+let slap = List.hd (List.tl Ability.abilities)
+let abilichar1 = char1 |> add_ability punch
+
+let abilichar4 =
+  char1 |> add_ability punch |> add_ability punch |> add_ability punch
+  |> add_ability punch
 
 let character_tests =
   [
     ( "Character creation | Name: Untitled" >:: fun _ ->
-      assert_equal "Untitled" char2.name );
+      assert_equal "Untitled" char2.name ~printer:(fun x -> x) );
+    ( "Character renaming | Name: Untitled" >:: fun _ ->
+      assert_equal "Untitled" (char1 |> rename "").name ~printer:(fun x -> x) );
     ( "Character name change" >:: fun _ ->
-      assert_equal "Momo" (Character.rename "Momo" char1).name );
+      assert_equal "Momo" (Character.rename "Momo" char1).name
+        ~printer:(fun x -> x) );
     ( "Character name change" >:: fun _ ->
-      assert_equal "Untitled" (Character.rename "" char1).name );
+      assert_equal "Untitled" (Character.rename "" char1).name
+        ~printer:(fun x -> x) );
+    ("Character generation" >:: fun _ -> assert_equal "John Cena" chargen1.name);
     ( "Character major change" >:: fun _ ->
       assert_equal ECE (Character.change_maj ECE char1).major );
     ( "Character change hp - still alive" >:: fun _ ->
@@ -28,6 +50,42 @@ let character_tests =
       assert_equal (-20, 100) (Character.change_hp (-120) char1).health );
     ( "Character change hp - dead" >:: fun _ ->
       assert_equal Dead (Character.change_hp (-120) char1).status );
+    ( "Character empty inventory" >:: fun _ ->
+      assert_equal 0 (List.length char1.inventory) );
+    ( "Character add item" >:: fun _ ->
+      assert_equal 1 (List.length (char1 |> add_item iced_tea).inventory) );
+    ( "Character remove from none" >:: fun _ ->
+      assert_equal (None, char1) (char1 |> remove_item iced_tea) );
+    ( "Character remove item" >:: fun _ ->
+      assert_equal (Some iced_tea, char1) (multichar1 |> remove_item iced_tea)
+    );
+    ( "Character remove item dupe" >:: fun _ ->
+      assert_equal
+        (Some iced_tea, multichar1)
+        (multichar2 |> remove_item iced_tea)
+        ~printer:(fun (_, x) -> string_of_int (List.length x.inventory)) );
+    ( "Character remove item triple dupe" >:: fun _ ->
+      assert_equal
+        (Some iced_tea, multichar2)
+        (multichar3 |> remove_item iced_tea)
+        ~printer:(fun (_, x) -> string_of_int (List.length x.inventory)) );
+    ( "Character remove item with multiple in inventory" >:: fun _ ->
+      assert_equal
+        (Some cornell_id, multichar1)
+        (multichar4 |> remove_item cornell_id)
+        ~printer:(fun (_, x) -> string_of_int (List.length x.inventory)) );
+    ( "Character add ability" >:: fun _ ->
+      assert_equal [ "Punch" ] (abilities_to_list abilichar1) );
+    ( "Character must overwrite ability" >:: fun _ ->
+      assert_equal abilichar4 (add_ability punch abilichar4) );
+    ( "Character override ability" >:: fun _ ->
+      assert_equal
+        [ "Slap"; "Punch"; "Punch"; "Punch" ]
+        (abilities_to_list (overwrite_ability slap punch abilichar4)) );
+    ( "Character override dupe" >:: fun _ ->
+      assert_equal
+        [ "Punch"; "Punch"; "Punch"; "Punch" ]
+        (abilities_to_list (overwrite_ability punch punch abilichar4)) );
   ]
 
 (********************************************************************
