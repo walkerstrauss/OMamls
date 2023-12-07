@@ -1,8 +1,10 @@
 open Location
+open Character
+open Event
 
 type weekday = 
   | Monday 
-  | Tueday 
+  | Tuesday 
   | Wednesday
   | Thursday 
   | Friday 
@@ -30,11 +32,12 @@ let add_time (old_time : time) (duration : time) : time =
   | i when i>59 -> (hour+dur_hour+1, minute+dur_minute-60)
   | _ -> (hour+dur_hour, minute+dur_minute)
 
-let day (char : Character) (week : int) =
+let morrison_hall : location = {place=(Dorm (North, "Toni Morrison Hall")); events=[];}
+
+let day (char1 : character) (week : int) =
   let rec events (location : location) (time : time) = 
     (*print out time and current skill levels*)
-    print_endline();
-    print_endline("The time is " ^ print_time time ". " ^"What would you like to do?");
+    print_endline("The time is " ^ (print_time time) ^ ". " ^ "What would you like to do?");
     (*access current location, give options for which events are available*)
 
     (*run specified event, updating skills accordingly and adding to the time*)
@@ -43,8 +46,8 @@ let day (char : Character) (week : int) =
     let (hour, minute) = time in
     match hour with
     |i when i>23 -> print_endline("You are done for the day!");
-    |_ -> events location time
+    |_ -> (**events location time*) print_endline ("");
   (*print out the day, start going into events until time is done for the day*)
-  print_endline("Currently it is week " ^ string_of_int week ^ ". The day is " ^ )
-  print_endline("You wake up in your dorm room.")
-  let () = events (Dorm (North)) (8,0)
+    print_endline("Currently it is week " ^ string_of_int week ^ ". The day is ");
+    print_endline("You wake up in your dorm room.")
+  in events morrison_hall (8,0)

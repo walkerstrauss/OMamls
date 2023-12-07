@@ -30,4 +30,3 @@ let get_place_name (loc : location): campus * string option =
   | Hall (campus, name) -> (campus, Some (name))
   | Dorm (campus, name) -> (campus, Some (name))
   | Outside (campus) -> (campus, None)
-  

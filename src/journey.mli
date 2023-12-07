@@ -1,12 +1,11 @@
 open Location
-
-open Location
+open Character
 open Event
 
 (** Days of the week. *)
 type weekday = 
   | Monday 
-  | Tueday 
+  | Tuesday 
   | Wednesday
   | Thursday 
   | Friday 
