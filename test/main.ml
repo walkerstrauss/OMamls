@@ -34,7 +34,7 @@ let character_tests =
     Ability Tests
   ********************************************************************)
 
-let a1 = Ability.create_ability "Punch" [ ("Stregnth", 1) ] (None, None)
+let a1 = Ability.create_ability "Punch" [ ("Strength", 1) ] (None, None)
 
 let a2 =
   Ability.create_ability ""
@@ -42,12 +42,15 @@ let a2 =
     ( Some { description = "has been punched!"; effect = [ (Damage 20, 1) ] },
       None )
 
+let e1 = Ability.create_effect "has been hit" [ (Damage 10, 1) ]
+let e2 = Ability.create_effect "" []
+
 let ability_tests =
   [
     ( "Create ability with no effects name" >:: fun _ ->
       assert_equal "Punch" a1.name );
     ( "Create ability with no effects required" >:: fun _ ->
-      assert_equal [ ("Stregnth", 1) ] a1.required );
+      assert_equal [ ("Strength", 1) ] a1.required );
     ( "Create ability with no effects effects" >:: fun _ ->
       assert_equal (None, None) a1.effect );
     ("Create ability with effects name" >:: fun _ -> assert_equal "" a2.name);
@@ -58,6 +61,13 @@ let ability_tests =
         ( Some { description = "has been punched!"; effect = [ (Damage 20, 1) ] },
           None )
         a2.effect );
+    ( "Create effect with description has been hit" >:: fun _ ->
+      assert_equal "has been hit" e1.description );
+    ( "Create effect with damage 10" >:: fun _ ->
+      assert_equal [ (Damage 10, 1) ] e1.effect );
+    ( "Create effect with no description" >:: fun _ ->
+      assert_equal "" e2.description );
+    ("Create effect with no effect" >:: fun _ -> assert_equal [] e2.effect);
   ]
 (********************************************************************
    Item Tests
