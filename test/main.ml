@@ -3,6 +3,13 @@ open Omamls
 open Character
 open Ability
 
+(** Test Plan:
+  Item.ml, Abilities.ml, Character.ml were tested through OUnit, and some functions within battle.ml 
+  were tested through OUnit. While, the rest of the files were manually tested, as we were testing
+  for the user's input and actions. The test cases were developed through using black and glass box 
+  ideology on each function to test for edge cases. This is to ensure that when the user plays the RPG
+  that the game is running, and functioning as intended regardless of the User's choices in the game.
+*)
 (********************************************************************
    Character Tests
  ********************************************************************)
@@ -127,9 +134,6 @@ let ability_tests =
       assert_equal "" e2.description );
     ("Create effect with no effect" >:: fun _ -> assert_equal [] e2.effect);
   ]
-(********************************************************************
-   Item Tests
- ********************************************************************)
 
 (********************************************************************
    Battle Tests

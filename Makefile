@@ -32,3 +32,6 @@ zip:
 clean:
 	dune clean
 	rm -f omamls.zip
+
+doc:
+	dune build @doc
