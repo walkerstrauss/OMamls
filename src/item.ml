@@ -17,17 +17,12 @@ let consumables_catelog =
     make_item "Cornell Dairy Ice Cream"
       "Legally speaking, this is butter. Heals 25 health."
       (Consumable (25, 5));
-    {
-      name = "CELSIUS Sparkling Energy Drink";
-      description = "Elixir of life for a Cornell engineer. Heals 15 health.";
-      category = Consumable (15, 6);
-    };
-    {
-      name = "Mattin's Quesadilla";
-      description =
-        "A quesadilla with sour cream, salsa, and guacamole. Heals 30 health.";
-      category = Consumable (30, 8);
-    };
+    make_item "CELSIUS Sparkling Energy Drink"
+      "Elixir of life for a Cornell engineer. Heals 15 health."
+      (Consumable (15, 6));
+    make_item "Mattin's Quesadilla"
+      "A quesadilla with sour cream, salsa, and guacamole. Heals 30 health."
+      (Consumable (30, 8));
   ]
 
 let supplies_catelog =
