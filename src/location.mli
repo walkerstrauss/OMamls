@@ -1,15 +1,21 @@
+open Event 
 
-(** Type of Room within a location that a player 
+(** The which campus a place is located. *)
+type campus = 
+  | North 
+  | Central 
+  | South 
+  | West 
+
+(** Type of place  within a location that a player 
     is currently located. *)
-type room = 
-  | Home 
-  | Lecture 
-  | Lounge 
-  | Lobby
+type place = 
+  | Dorm of campus * string
+  | Hall of campus * string
+  | Store of campus * string * time * time
+  | Outside of campus
 
-(** The type of location that a player is currently located. *)
-type location = 
-  | Store  
-  | Eatery 
-  | Dorm of room
-  | Hall of room
+type location = {
+    place : place;
+    events : event list
+}
