@@ -10,6 +10,9 @@ type category =
 type item = { name : string; description : string; category : category }
 (** Type for items that characters equip. *)
 
+val make_item : string -> string -> category -> item
+val rename_item : item -> string -> item
+
 val consumables_catelog : item list
 (** Catelog of all Consumable items.*)
 
