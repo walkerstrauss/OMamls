@@ -8,6 +8,14 @@ type battle_character = character * (effect_type * int) list
 type state = battle_character * turn * battle_character
 type env = state list
 
+type battle_summary = {
+  winner : character option;
+  loser : character option;
+  cycles : int;
+  turns : int;
+  env : env;
+}
+
 let get_user_choice (message : string) =
   print_endline message;
   print_string "> "
@@ -271,5 +279,40 @@ and turn (env : env) : env =
             flee env)
   | _, End _, _ -> env
 
-let battle (user : character) (opp : character) : state =
-  List.hd (turn [ ((user, []), User, (opp, [])) ])
+let battle (user : character) (opp : character) : env =
+  turn [ ((user, []), User, (opp, [])) ]
+
+let summary (env : env) : battle_summary =
+  let rec summary_aux (env : env) (curr : battle_summary) =
+    match env with
+    | [] -> failwith "This battle is not completed yet!"
+    | (user, User, opp) :: t ->
+        if match t with (_, Opponent, _) :: _ -> true | _ -> false then
+          summary_aux t
+            {
+              curr with
+              cycles = curr.cycles + 1;
+              turns = curr.turns + 1;
+              env = (user, User, opp) :: curr.env;
+            }
+        else
+          summary_aux t
+            {
+              curr with
+              turns = curr.turns + 1;
+              env = (user, User, opp) :: curr.env;
+            }
+    | (user, Opponent, opp) :: t ->
+        summary_aux t
+          {
+            curr with
+            turns = curr.turns + 1;
+            env = (user, User, opp) :: curr.env;
+          }
+    | (user, End x, opp) :: _ ->
+        if x = User then
+          { curr with winner = Some (fst user); loser = Some (fst opp) }
+        else { curr with winner = Some (fst opp); loser = Some (fst user) }
+  in
+  summary_aux (List.rev env)
+    { winner = None; loser = None; cycles = 0; turns = 0; env = [] }

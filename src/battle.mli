@@ -57,6 +57,16 @@ val turn : env -> env
     Depending on the choice made, the character's status or health changes. 
     If the option wasn't either attack, item or flee, then the character gets to make the same choice again.*)
 
-val battle : character -> character -> state
+val battle : character -> character -> env
 (** Creates a battle sequence between two characters. Depending on the outcome, 
     returns the user's updated character status after the battle. *)
+
+type battle_summary = {
+  winner : character option;
+  loser : character option;
+  cycles : int;
+  turns : int;
+  env : env;
+}
+
+val summary : env -> battle_summary
