@@ -59,7 +59,7 @@ let print_inventory (character : character) : string =
 let rec use_ability (user : battle_character) (opp : battle_character)
     (ability : ability) : (battle_character * battle_character) option =
   let { name; required; effect } = ability in
-  if has_requirement (fst user) required then
+  if has_skills (fst user) required then
     match effect with
     | Some e1, None ->
         Printf.printf "%s used %s!\n" (fst user).name name;
@@ -137,16 +137,6 @@ and apply_old_effects (character : battle_character) : battle_character =
     | _ -> failwith "Todo"
   in
   app_aux (fst character) (snd character) []
-
-and has_requirement (user : character) (required : (string * int) list) : bool =
-  match required with
-  | [] -> true
-  | (rstr, rrtg) :: t -> (
-      match
-        List.find_opt (fun (str, rtg) -> rstr = str && rrtg >= rtg) user.skills
-      with
-      | None -> false
-      | Some _ -> has_requirement user t)
 
 and is_skipped (curr_effects : (effect_type * int) list) : bool =
   match

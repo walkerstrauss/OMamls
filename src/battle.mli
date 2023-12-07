@@ -36,7 +36,6 @@ val use_ability :
 
 val apply_new_effect : battle_character -> effect -> battle_character
 val apply_old_effects : battle_character -> battle_character
-val has_requirement : character -> (string * int) list -> bool
 val is_skipped : (effect_type * int) list -> bool
 
 val attack : state -> int -> state
