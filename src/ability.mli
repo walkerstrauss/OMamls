@@ -44,5 +44,13 @@ val create_effect : string -> (effect_type * int) list -> effect
 (**Function that creates an effect with the inputs
     Returns an effect*)
 
+val punch : ability
+val slap : ability
+val throw_item : ability
+val meditate : ability
+
+val ability_of_string : string -> ability
+(** Function that returns ability associated with input string *)
+
 val abilities : ability list
 (**List of possible abilities a player can have*)

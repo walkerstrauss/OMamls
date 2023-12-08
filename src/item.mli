@@ -12,6 +12,18 @@ type item = { name : string; description : string; category : category }
 
 val make_item : string -> string -> category -> item
 val rename_item : item -> string -> item
+val iced_tea : item
+val lollipop : item
+val ice_cream : item
+val celcius : item
+val quesadilla : item
+val cornell_id : item
+val cg_jacket : item
+val adderal : item
+val ipad : item
+val mac : item
+val poster : item
+val item_of_string : string -> item
 
 val consumables_catelog : item list
 (** Catelog of all Consumable items.*)

@@ -1,6 +1,7 @@
 (library
  (name omamls)
  (public_name OMamls)
+ (libraries csv)
  (flags
   (:standard -warn-error -A)))
 
