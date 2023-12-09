@@ -42,3 +42,14 @@ let event_to_string (ent : event) : string =
   let hour, min = ent.duration in
   ent.name ^ " -> (" ^ string_of_int hour ^ " hrs & " ^ string_of_int min
   ^ " mins)"
+
+let dinner =
+  { name = "Dinner"; duration = (1, 0); skill_effect = []; category = Special }
+
+let test =
+  {
+    name = "Test";
+    duration = (1, 30);
+    skill_effect = [ ("placeholder", 0) ];
+    category = Test;
+  }

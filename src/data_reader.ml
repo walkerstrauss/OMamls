@@ -138,7 +138,27 @@ let events_of_csv filename =
     [name1] [dur_hr1] [dur_min1], [skill effect string1] 
     [skill effect int1] [category1],
     [name2] ... for more events *)
-let locations_of_data d = failwith "Unimplmented"
+let locations_of_data d =
+  let rec drop n lst =
+    match lst with
+    | [] -> []
+    | h :: t -> if n = 0 then h :: drop n t else drop (n - 1) t
+  in
+  let rec events lst acc =
+    match lst with
+    | [] -> acc
+    | h :: h2 :: h3 :: h4 :: h5 :: h6 :: t ->
+        let acc2 = events_of_data [ [ h; h2; h3; h4; h5; h6 ] ] @ acc in
+        events t acc2
+    | _ -> failwith "String list list is in wrong format"
+  in
+  List.map
+    (fun row ->
+      let place = Location.place_of_string_list row in
+      let row2 = drop 7 row in
+      let ev_lst = events row2 [] in
+      { place; events = ev_lst })
+    d
 
 (** Takes an argument for filename and uses Csv module to create location list.*)
 let locations_of_csv filename =

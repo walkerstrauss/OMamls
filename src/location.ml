@@ -60,3 +60,11 @@ let get_place (loc : location) : campus * string option =
   | Hall (campus, name) -> (campus, Some name)
   | Dorm (campus, name) -> (campus, Some name)
   | Outside campus -> (campus, None)
+
+let outside1 = { place = Outside West; events = [] }
+
+let hans_bethe_house =
+  {
+    place = Dorm (West, "Hans Bethe House");
+    events = [ Event.dinner; Event.test ];
+  }

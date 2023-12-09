@@ -25,7 +25,7 @@ val campus_to_string : campus -> string
 val campus_of_string : string -> campus
 (** Converts string to campus using pattern matching. *)
 
-val place_of_string_list : string -> place
+val place_of_string_list : string list -> place
 (** Converts string list to place using pattern matching. List in form 
     [place], [campus], [name], [time1_hr], [time1_min], [time2_hr], [time2_min]
     *)
@@ -33,3 +33,6 @@ val place_of_string_list : string -> place
 val get_place_name : location -> campus * string option
 (** Returns a tuple of the form ([campus], Some [name]) if the location has a
     name and the form (Outside, None) if the location is outside *)
+
+val outside1 : location
+val hans_bethe_house : location

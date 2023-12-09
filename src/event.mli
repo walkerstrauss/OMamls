@@ -30,3 +30,6 @@ val make_event : string -> time -> (string * int) list -> category -> event
 
 val event_to_string : event -> string
 (** Function that turns event to string*)
+
+val dinner : event
+val test : event
