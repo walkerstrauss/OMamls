@@ -5,8 +5,6 @@
    (** Days of the week. *)
    type weekday = Monday | Tuesday | Wednesday | Thursday | Friday
 
-   (** The Day. *)
-   type day = weekday
 
    (** Prints out the current time.*)
    val print_time : time -> string
@@ -23,5 +21,5 @@
    (** Gets the next day of the week. *)
    val next_day: weekday -> weekday
 
-   (** Goes through the user's character's day, and their actions throughout the day.*)
-   val day : character -> int -> character *)
+(** Goes through the user's character's day, and their actions throughout the day.*)
+val day : character -> int -> weekday -> character
