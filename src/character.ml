@@ -28,7 +28,7 @@ let rec abilities_list amt acc =
   match amt with 0 -> acc | _ -> abilities_list (amt - 1) (None :: acc)
 
 (**Create the character with a given name and major*)
-let create name major ability_amt max_hp classes brbs =
+let create name major ability_amt max_hp brbs =
   {
     name = (if String.length (String.trim name) = 0 then "Untitled" else name);
     health = (max_hp, max_hp);
@@ -38,7 +38,7 @@ let create name major ability_amt max_hp classes brbs =
     abilities = abilities_list ability_amt [];
     inventory = [];
     status = Alive;
-    classes;
+    classes = [];
     brbs;
   }
 

@@ -7,5 +7,5 @@ type class' = {
 }
 
 val generate_prelim : unit -> prelim
-val create_class : string -> int
-val take_prelim : int -> class'
+val create_class : string -> int -> class'
+val take_prelim : int -> class' -> class'
