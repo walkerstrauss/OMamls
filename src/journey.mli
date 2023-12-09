@@ -5,5 +5,7 @@ open Event
 (** Days of the week. *)
 type weekday = Monday | Tuesday | Wednesday | Thursday | Friday
 
+(** The Day. *)
 type day = weekday
-(** The Day, and time. *)
+
+val day : character -> int -> character

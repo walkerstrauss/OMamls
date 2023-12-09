@@ -17,9 +17,9 @@ let campus_to_string (campus : campus) : string =
   | South -> "South"
   | West -> "West"
 
-let get_place_name (loc : location) : campus * string option =
-  match loc.place with
-  | Store (campus, name, _, _) -> (campus, Some name)
-  | Hall (campus, name) -> (campus, Some name)
-  | Dorm (campus, name) -> (campus, Some name)
-  | Outside campus -> (campus, None)
+let get_place (loc : location): campus * string option = 
+  match loc.place with 
+  | Store (campus, name, _, _) -> (campus, Some (name))
+  | Hall (campus, name) -> (campus, Some (name))
+  | Dorm (campus, name) -> (campus, Some (name))
+  | Outside (campus) -> (campus, None)
