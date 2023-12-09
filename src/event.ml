@@ -4,9 +4,10 @@ type event = {
   name : string;
   duration : time;
   skill_effect : (string * int) list;
+  category : category;
 }
 
-type category =
+and category =
   | Idle
   | Travel
   | Lecture
@@ -17,6 +18,26 @@ type category =
   | Special
   | Battle of Battle.env
 
+(** Uses pattern matching to turn string into category*)
+let category_of_string (s : string) (env : Battle.env option) : category =
+  match (s, env) with
+  | "Idle", None -> Idle
+  | "Travel", None -> Travel
+  | "Lecture", None -> Lecture
+  | "Discussion", None -> Discussion
+  | "Party", None -> Party
+  | "Meeting", None -> Meeting
+  | "Test", None -> Test
+  | "Special", None -> Special
+  | "Battle", Some _ -> Battle []
+  | _ -> failwith "Invalid category"
+
+(** Function to make an event *)
+let make_event (name : string) (duration : time)
+    (skill_effect : (string * int) list) (category : category) : event =
+  { name; duration; skill_effect; category }
+
+(** Function that turns event to string*)
 let event_to_string (ent : event) : string =
   let hour, min = ent.duration in
   ent.name ^ " -> (" ^ string_of_int hour ^ " hrs & " ^ string_of_int min

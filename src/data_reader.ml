@@ -1,5 +1,7 @@
 open Ability
 open Item
+open Event
+open Location
 open Csv
 open Character
 
@@ -110,5 +112,35 @@ let items_of_csv filename =
   let d = read_data filename in
   items_of_data d
 
-(* let events_of_csv filename
-   let locations_of_csv filename *)
+(** Takes argument of type [Csv.t] and generates event list*)
+let events_of_data d =
+  List.map
+    (fun row ->
+      let name = List.hd row in
+      let duration =
+        (int_of_string (List.nth row 1), int_of_string (List.nth row 2))
+      in
+      let skill_effect = [ (List.nth row 3, int_of_string (List.nth row 4)) ] in
+      let category = Event.category_of_string (List.nth row 5) in
+      make_event name duration skill_effect category)
+    d
+
+(** Takes an argument for filename and uses Csv module to create event list. 
+    Csv.t from csv should be in the format: [name] [dur_hr] [dur_min] 
+    [skill effect string] [skill effect int] [category] *)
+let events_of_csv filename =
+  let d = read_data filename in
+  events_of_data d
+
+(** Takes argument of type [Csv.t] and generates location list. Csv.t should be 
+    in the form [place], [campus], [name], [time1_hr], [time1_min], [time2_hr],
+    [time2_min], 
+    [name1] [dur_hr1] [dur_min1], [skill effect string1] 
+    [skill effect int1] [category1],
+    [name2] ... for more events *)
+let locations_of_data d = failwith "Unimplmented"
+
+(** Takes an argument for filename and uses Csv module to create location list.*)
+let locations_of_csv filename =
+  let d = read_data filename in
+  locations_of_data d

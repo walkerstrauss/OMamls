@@ -1,5 +1,7 @@
 open Ability
 open Item
+open Event
+open Location
 open Csv
 open Character
 
@@ -58,5 +60,21 @@ val items_of_csv : string -> item list
 (** Takes argument for filename and uses Csv module to create item list.
     Csv in format: [name], [description], [category], [fst], [snd] *)
 
-(* val events_of_csv : string -> event list
-   val locations_of_csv : string -> location list *)
+val events_of_data : Csv.t -> item list
+(** Takes argument of type [Csv.t] and generates event list*)
+
+val events_of_csv : string -> event list
+(** Takes an argument for filename and uses Csv module to create event list. 
+    Csv.t from csv should be in the format: [name] [dur_hr] [dur_min] 
+    [skill effect string] [skill effect int] [category] *)
+
+val locations_of_data : Csv.t -> location list
+(** Takes argument of type [Csv.t] and generates location list. Csv.t should be 
+    in the form [place], [campus], [name], [time1_hr], [time1_min], [time2_hr],
+    [time2_min], 
+    [name1] [dur_hr1] [dur_min1], [skill effect string1] 
+    [skill effect int1] [category1],
+    [name2] ... for more events *)
+
+val locations_of_csv : string -> location list
+(** Takes an argument for filename and uses Csv module to create location list.*)
