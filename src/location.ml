@@ -12,8 +12,8 @@ type place =
   | Store of campus * string * time * time
   | Outside of campus
 
-(** Type representing character location in the game. *)
 type location = { place : place; events : event list }
+(** Type representing character location in the game. *)
 
 (** Converts campus to string representation*)
 let campus_to_string (campus : campus) : string =
@@ -33,9 +33,9 @@ let campus_of_string (s : string) : campus =
   | _ -> failwith "Invalid campus"
 
 (** Gets the remaining campuses that a Player can go to. *)
-let get_remander_campuses (campus : campus): campus list = 
-  let campus_list = [North; Central; South; West] in 
-  (List.filter (fun x -> if(campus = x) then false else true) campus_list)
+let get_remander_campuses (campus : campus) : campus list =
+  let campus_list = [ North; Central; South; West ] in
+  List.filter (fun x -> if campus = x then false else true) campus_list
 
 (** Returns a tuple of the form ([campus], Some [name]) if the location has a
     name and the form (Outside, None) if the location is outside *)
@@ -46,37 +46,38 @@ let get_place_name (loc : location) : campus * string option =
   | Dorm (campus, name) -> (campus, Some name)
   | Outside campus -> (campus, None)
 
-let print_campus_options (campuses : campus list): string = 
+let print_campus_options (campuses : campus list) : string =
   let init =
     "Please select the following options (1 - "
-    ^ string_of_int ((List.length campuses))
+    ^ string_of_int (List.length campuses)
     ^ "):\n"
   in
-  let rec campus_print (campus: campus list) (count: int): string =
+  let rec campus_print (campus : campus list) (count : int) : string =
     match campus with
     | [] -> ""
-    | h :: t -> ((string_of_int count) ^ ". " 
-      ^ (campus_to_string h) 
-      ^ " (25 mins)\n" 
-      ^ (campus_print t (count + 1)))
-  in init ^ (campus_print campuses 1)
+    | h :: t ->
+        string_of_int count ^ ". " ^ campus_to_string h ^ " (25 mins)\n"
+        ^ campus_print t (count + 1)
+  in
+  init ^ campus_print campuses 1
 
-let print_location_options (lct : location list): string = 
+let print_location_options (lct : location list) : string =
   let init =
     "Please select the following options (1 - "
-    ^ string_of_int ((List.length lct))
+    ^ string_of_int (List.length lct)
     ^ "):\n"
   in
-  let rec lcts_print (located: location list) (count: int): string =
-    let name (loc: location) = 
-      match get_place_name loc with 
-      | (_, Some (name)) -> name
-      | (_, None) -> "N/A"
-    in match located with
+  let rec lcts_print (located : location list) (count : int) : string =
+    let name (loc : location) =
+      match get_place_name loc with _, Some name -> name | _, None -> "N/A"
+    in
+    match located with
     | [] -> ""
-    | h :: t -> ((string_of_int count) 
-    ^ ") " ^ (name h) ^ " (10mins)\n" ^ (lcts_print t (count + 1)))
-  in init ^ (lcts_print lct 1)
+    | h :: t ->
+        string_of_int count ^ ") " ^ name h ^ " (10mins)\n"
+        ^ lcts_print t (count + 1)
+  in
+  init ^ lcts_print lct 1
 
 (** Converts string list to place using pattern matching. List in form 
     [place], [campus], [name], [time1_hr], [time1_min], [time2_hr], [time2_min]
@@ -98,8 +99,10 @@ let place_of_string_list (lst : string list) : place =
   | "Outside" -> Outside campus
   | _ -> failwith "Invalid place"
 
-
 let outside_west = { place = Outside West; events = [] }
+
+let morrison_hall : location =
+  { place = Dorm (North, "Toni Morrison Hall"); events = [ Event.sleep_in ] }
 
 let hans_bethe_house =
   {
@@ -107,15 +110,16 @@ let hans_bethe_house =
     events = [ Event.dinner; Event.test ];
   }
 
-let rec same_campus_list (campus : campus) (locations : location list): location list = 
-  let checker1 (loc : location) = 
-    if (campus = fst (get_place_name loc)) then true else false in 
-  let checker2 (loc : location): bool = 
-      match get_place_name loc with 
-      | (_, None) -> false
-      | _ -> true
-  in 
-  match locations with 
+let rec same_campus_list (campus : campus) (locations : location list) :
+    location list =
+  let checker1 (loc : location) =
+    if campus = fst (get_place_name loc) then true else false
+  in
+  let checker2 (loc : location) : bool =
+    match get_place_name loc with _, None -> false | _ -> true
+  in
+  match locations with
   | [] -> []
-  | loct :: t when ((checker1 loct) && (checker2 loct)) -> loct :: same_campus_list campus t
+  | loct :: t when checker1 loct && checker2 loct ->
+      loct :: same_campus_list campus t
   | _ :: t -> same_campus_list campus t

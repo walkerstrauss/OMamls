@@ -32,5 +32,5 @@ val event_to_string : event -> string
 (** Function that turns event to string*)
 
 val dinner : event
-
+val sleep_in : event
 val test : event

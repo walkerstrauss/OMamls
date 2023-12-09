@@ -14,9 +14,9 @@ and category =
   | Discussion
   | Party
   | Meeting
-  | Test 
+  | Test
   | Special
-  | Battle 
+  | Battle
 
 (** Uses pattern matching to turn string into category*)
 let category_of_string (s : string) (env : Battle.env option) : category =
@@ -29,7 +29,7 @@ let category_of_string (s : string) (env : Battle.env option) : category =
   | "Meeting", None -> Meeting
   | "Test", None -> Test
   | "Special", None -> Special
-  | "Battle", None -> Battle 
+  | "Battle", None -> Battle
   | _ -> failwith "Invalid category"
 
 (** Function to make an event *)
@@ -57,4 +57,12 @@ let test =
     duration = (1, 30);
     skill_effect = [ ("placeholder", 1) ];
     category = Test;
+  }
+
+let sleep_in : event =
+  {
+    name = "Sleep in (1 hour)";
+    duration = (1, 0);
+    skill_effect = [ ("Smartness", 0); ("Happiness", 10) ];
+    category = Idle;
   }
