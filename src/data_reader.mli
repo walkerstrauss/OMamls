@@ -77,4 +77,5 @@ val locations_of_data : Csv.t -> location list
     [name2] ... for more events *)
 
 val locations_of_csv : string -> location list
-(** Takes an argument for filename and uses Csv module to create location list.*)
+(** Takes an argument for filename and uses Csv module to create location list.
+    *)
