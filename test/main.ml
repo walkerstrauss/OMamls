@@ -197,8 +197,75 @@ let battle_tests =
         (Battle.print_abilities empty_ability_char) ~printer:(fun x -> x) );
   ]
 
+(********************************************************************
+   Data Reader Tests
+ ********************************************************************)
+
+let d1 = [ [ "Punch"; "Celcius" ]; [ "Slap"; "Cornell Dairy Ice Cream" ] ]
+
+let d2 =
+  [ [ "Slap"; "iPad" ]; [ "Punch"; "MacBook" ]; [ "Meditate"; "Celcius" ] ]
+
+let d3 =
+  [
+    [ "Punch"; "false"; ""; "1"; "true"; "has been punched!"; "20" ];
+    [ "Slap"; "false"; ""; "1"; "true"; "has been slapped!"; "10" ];
+  ]
+
+let d4 =
+  [
+    [
+      "Iced Tea";
+      "Ice Cold Delicious Beverage. Heals 20 Health";
+      "Consumable";
+      "20";
+      "4";
+    ];
+  ]
+
+let data_reader_tests =
+  [
+    ( "Test abilities_helper with d1" >:: fun _ ->
+      assert_equal
+        [ Ability.punch; Ability.slap ]
+        (Data_reader.abilities_helper d1) );
+    ( "Test abilities_helper with empty list" >:: fun _ ->
+      assert_equal [] (Data_reader.abilities_helper []) );
+    ( "Test abilities_helper with longer list d2" >:: fun _ ->
+      assert_equal
+        [ Ability.slap; Ability.punch; Ability.meditate ]
+        (Data_reader.abilities_helper d2) );
+    ( "Test items_helper with d1" >:: fun _ ->
+      assert_equal
+        [ Item.celcius; Item.ice_cream ]
+        (Data_reader.items_helper d1) );
+    ( "Test items_helper with empty list" >:: fun _ ->
+      assert_equal [] (Data_reader.items_helper []) );
+    ( "Test items_helper with longer list d2" >:: fun _ ->
+      assert_equal
+        [ Item.ipad; Item.mac; Item.celcius ]
+        (Data_reader.items_helper d2) );
+    ( "Test abilities_of_data with d3" >:: fun _ ->
+      assert_equal
+        [ Ability.punch; Ability.slap ]
+        (Data_reader.abilities_of_data d3) );
+    ( "Test abilities_of_data with []" >:: fun _ ->
+      assert_equal [] (Data_reader.abilities_of_data []) );
+    ( "Test items_of_data with d4" >:: fun _ ->
+      assert_equal [ Item.iced_tea ] (Data_reader.items_of_data d4) );
+    ( "Test items_of_data with []" >:: fun _ ->
+      assert_equal [] (Data_reader.items_of_data []) );
+  ]
+
 let test =
   "Test Suite for OMamls: Cornell RPG"
-  >::: List.flatten [ character_tests; battle_tests; ability_tests; item_tests ]
+  >::: List.flatten
+         [
+           character_tests;
+           battle_tests;
+           ability_tests;
+           item_tests;
+           data_reader_tests;
+         ]
 
 let _ = run_test_tt_main test

@@ -70,7 +70,7 @@ let item_of_string s =
   | "Canada Goose Jacket" -> cg_jacket
   | "Adderal" -> adderal
   | "iPad with Apple Pencil" | "iPad" -> ipad
-  | "MacBook Pro" | "Macbook Pro" -> mac
+  | "MacBook Pro" | "Macbook Pro" | "MacBook" -> mac
   | "Poster" -> poster
   | _ -> failwith "Not a valid item"
 

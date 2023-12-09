@@ -1,7 +1,5 @@
 open Ability
 open Item
-open Event
-open Location
 open Csv
 open Character
 
@@ -36,6 +34,9 @@ val char_of_data : Csv.t -> string list -> string list -> character
 (** Takes an argument of type [Csv.t] and generates randomly named character 
     using abilities and items from csv file. *)
 
+val abilities_of_data : Csv.t -> ability list
+(** Helper function for below. *)
+
 val abilities_of_csv : string -> ability list
 (** Takes argument for filename and uses Csv module to create Csv.t of csv file 
     in the format <[name],[bool1] [description1] [amount1], [bool3] 
@@ -46,8 +47,16 @@ val abilities_of_csv : string -> ability list
       (if [bool2] = true then Some (create_effect description1 damage
          (amount1)) else None, 
        if [bool3] = true then Some (create_effect description2 damage
-         (amount2)) else None) *)
+         (amount2)) else None)
+    Then creates ability list of Csv.t *)
 
-(* val items_of_csv : string -> ability list
-   val events_of_csv : string -> event list
+val items_of_data : Csv.t -> item list
+(** Takes argument of Csv.t and creates item list.
+   Csv.t in format: [name], [description], [category], [fst], [snd] *)
+
+val items_of_csv : string -> item list
+(** Takes argument for filename and uses Csv module to create item list.
+    Csv in format: [name], [description], [category], [fst], [snd] *)
+
+(* val events_of_csv : string -> event list
    val locations_of_csv : string -> location list *)

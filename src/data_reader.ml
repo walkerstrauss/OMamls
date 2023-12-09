@@ -1,7 +1,5 @@
 open Ability
 open Item
-open Event
-open Location
 open Csv
 open Character
 
@@ -43,6 +41,32 @@ let char_of_data lst first_names last_names =
   generate (first_names, last_names) [] [] (abilities_helper lst)
     (items_helper lst) 2
 
+(** Helper function for below. *)
+let abilities_of_data data_lst =
+  List.map
+    (fun row ->
+      let name = List.hd row in
+      let bool1 = bool_of_string (List.nth row 1) in
+      let description1 = List.nth row 2 in
+      let effect1 =
+        if bool1 then
+          Some
+            (create_effect description1
+               [ (Damage (int_of_string (List.nth row 3)), 1) ])
+        else None
+      in
+      let bool2 = bool_of_string (List.nth row 4) in
+      let description2 = List.nth row 5 in
+      let effect2 =
+        if bool2 then
+          Some
+            (create_effect description2
+               [ (Damage (int_of_string (List.nth row 6)), 1) ])
+        else None
+      in
+      create_ability name [] (effect1, effect2))
+    data_lst
+
 (** Takes argument for filename and uses Csv module to create Csv.t of csv file 
 where each row represents an ability where <[name],[bool1] [description1] 
 [amount1], [bool2], [description2], [amount2] and inputs to create_ability are
@@ -53,39 +77,38 @@ effect =
 (if [bool1] = true then Some (create_effect description1 damage
    (amount1)) else None, 
    if [bool2] = true then Some (create_effect description2 damage
-   (amount2)) else None) *)
+   (amount2)) else None) 
+   Then creates ability list of Csv.t *)
 let abilities_of_csv filename =
-  let bool_of_string s =
-    match s with
-    | "true" -> true
-    | "false" -> false
-    | _ -> failwith "not boolean str"
-  in
   let data_lst = read_data filename in
+  abilities_of_data data_lst
+
+(** Takes argument of Csv.t and creates item list.
+   Csv.t in format: [name], [description], [category], [fst], [snd] *)
+let items_of_data d =
   List.map
     (fun row ->
-      let name = List.hd row in
-      let bool1 = bool_of_string (List.nth row 1) in
-      let description1 = List.nth row 2 in
-      let effect1 =
-        if bool1 then
-          Some
-            (create_effect description1
-               [ (Damage (int_of_string (List.nth row 3)), 3) ])
-        else None
+      let s = List.nth row 2 in
+      let category =
+        match s with
+        | "Consumable" ->
+            let fst, snd =
+              (int_of_string (List.nth row 3), int_of_string (List.nth row 4))
+            in
+            Consumable (fst, snd)
+        | "Supplies" -> Supplies (List.nth row 3, None)
+        | "Tech" -> Tech (List.nth row 3, None)
+        | "Misc" -> Misc (List.nth row 3, None)
+        | _ -> failwith "Not a item category"
       in
-      let bool2 = bool_of_string (List.nth row 4) in
-      let description2 = List.nth row 5 in
-      let effect2 =
-        if bool2 then
-          Some
-            (create_effect description2
-               [ (Damage (int_of_string (List.nth row 6)), 3) ])
-        else None
-      in
-      create_ability name [] (effect1, effect2))
-    data_lst
+      make_item (List.hd row) (List.nth row 1) category)
+    d
 
-(* let items_of_csv filename
-   let events_of_csv filename
+(** Takes argument for filename and uses Csv module to create item list.
+    Csv in format: [name], [description], [category], [fst], [snd] *)
+let items_of_csv filename =
+  let d = read_data filename in
+  items_of_data d
+
+(* let events_of_csv filename
    let locations_of_csv filename *)
