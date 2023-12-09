@@ -56,6 +56,6 @@ let test =
   {
     name = "Test";
     duration = (1, 30);
-    skill_effect = [ ("placeholder", 0) ];
+    skill_effect = [ ("placeholder", 1) ];
     category = Test;
   }

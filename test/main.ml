@@ -229,30 +229,30 @@ let d5 =
     [ "Dinner"; "1"; "0"; "placeholder"; "1"; "Special" ];
   ]
 
-(* let d6 =
-   [
-     [
-       "Dorm";
-       "West";
-       "Hans Bethe House";
-       "";
-       "";
-       "";
-       "";
-       "Test";
-       "1";
-       "30";
-       "placeholder";
-       "1";
-       "Test";
-       "Dinner";
-       "1";
-       "0";
-       "";
-       "";
-       "Special";
-     ];
-   ] *)
+let d6 =
+  [
+    [
+      "Dorm";
+      "West";
+      "Hans Bethe House";
+      "";
+      "";
+      "";
+      "";
+      "Dinner";
+      "1";
+      "0";
+      "placeholder";
+      "1";
+      "Special";
+      "Test";
+      "1";
+      "30";
+      "placeholder";
+      "1";
+      "Test";
+    ];
+  ]
 
 let data_reader_tests =
   [
@@ -291,6 +291,14 @@ let data_reader_tests =
     );
     ( "Test events_of_data with empty list" >:: fun _ ->
       assert_equal [] (Data_reader.events_of_data []) );
+    ( "Test locations_of_data with d6" >:: fun _ ->
+      assert_equal
+        (Location.Dorm (West, "Hans Bethe House"))
+        (d6 |> Data_reader.locations_of_data |> List.hd).place );
+    ( "Test locations_of_data with d6" >:: fun _ ->
+      assert_equal
+        [ Location.hans_bethe_house ]
+        (d6 |> Data_reader.locations_of_data) );
   ]
 
 let test =

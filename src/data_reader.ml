@@ -134,7 +134,9 @@ let locations_of_data d =
     match lst with
     | [] -> acc
     | h :: h2 :: h3 :: h4 :: h5 :: h6 :: t ->
-        let acc2 = events_of_data [ [ h; h2; h3; h4; h5; h6 ] ] @ acc in
+        let acc2 =
+          acc @ [ List.hd (events_of_data [ [ h; h2; h3; h4; h5; h6 ] ]) ]
+        in
         events t acc2
     | _ -> failwith "String list list is in wrong format"
   in

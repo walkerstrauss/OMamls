@@ -34,5 +34,5 @@ val get_place_name : location -> campus * string option
 (** Returns a tuple of the form ([campus], Some [name]) if the location has a
     name and the form (Outside, None) if the location is outside *)
 
-val outside1 : location
+val outside_west : location
 val hans_bethe_house : location

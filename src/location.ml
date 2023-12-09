@@ -61,7 +61,7 @@ let get_place_name (loc : location) : campus * string option =
   | Dorm (campus, name) -> (campus, Some name)
   | Outside campus -> (campus, None)
 
-let outside1 = { place = Outside West; events = [] }
+let outside_west = { place = Outside West; events = [] }
 
 let hans_bethe_house =
   {
