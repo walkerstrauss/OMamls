@@ -36,7 +36,8 @@ let last_names =
 let major_list = [ CS; ECE; MechE; ChemE; CivilE; IS ]
 
 (********** command line interface **********)
-let rec test (curr_day : day) (week : int) (character : character) : character =
+let rec progression (curr_day : day) (week : int) (character : character) :
+    character =
   if week = 15 then character
   else
     let character' = day character week in
@@ -92,8 +93,8 @@ let () =
             (List.nth Ability.abilities 1)
             (add_ability (List.hd Ability.abilities) charac)))
   in
-  let character' = test Monday 0 battle_charac in
-  (if Character.has_skills character' [ ("Internal Counter", 3) ] then
+  let character' = progression Monday 0 battle_charac in
+  (if Character.gpa character' > 3.0 then
      Printf.printf "Congratulations on completing the semester %s!"
    else
      Printf.printf

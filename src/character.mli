@@ -1,5 +1,6 @@
 open Item
 open Ability
+open Class
 
 (**The possible majors to choose from*)
 type major = CS | ECE | MechE | ChemE | CivilE | IS
@@ -16,6 +17,7 @@ type character = {
   abilities : ability option list;
   inventory : item list;
   status : status;
+  classes : class' list;
   brbs : int;
 }
 (**The type of the character*)
@@ -61,6 +63,9 @@ val remove_item : item -> character -> item option * character
     inventory and returns None when the item is not in the inventory, 
     and the character with its inventory appropriately altered*)
 
+val add_class : class' -> character -> character
+val drop_class : class' -> character -> character
+
 val add_ability : ability -> character -> character
 (**Add the inputted ability to the character
     Returns the character with the updated ability list
@@ -82,3 +87,4 @@ val abilities_to_list : character -> string list
     Returns the name of the character's abilities*)
 
 val has_skills : character -> (string * int) list -> bool
+val gpa : character -> float

@@ -1,5 +1,6 @@
 open Item
 open Ability
+open Class
 
 (**Character major type*)
 type major = CS | ECE | MechE | ChemE | CivilE | IS
@@ -16,6 +17,7 @@ type character = {
   abilities : ability option list;
   inventory : item list;
   status : status;
+  classes : class' list;
   brbs : int;
 }
 (** Character type*)
@@ -26,7 +28,7 @@ let rec abilities_list amt acc =
   match amt with 0 -> acc | _ -> abilities_list (amt - 1) (None :: acc)
 
 (**Create the character with a given name and major*)
-let create name major ability_amt max_hp brbs =
+let create name major ability_amt max_hp classes brbs =
   {
     name = (if String.length (String.trim name) = 0 then "Untitled" else name);
     health = (max_hp, max_hp);
@@ -36,6 +38,7 @@ let create name major ability_amt max_hp brbs =
     abilities = abilities_list ability_amt [];
     inventory = [];
     status = Alive;
+    classes;
     brbs;
   }
 
@@ -96,6 +99,7 @@ let generate ((first, last) : string list * string list) (majors : major list)
     abilities;
     inventory;
     status = Alive;
+    classes = [];
     brbs = 0;
   }
 
@@ -131,6 +135,21 @@ let remove_item item character =
   in
   let item', inventory' = remove_aux item character.inventory in
   (item', { character with inventory = inventory' })
+
+let add_class (class' : class') (character : character) : character =
+  match
+    List.find_opt (fun (x : class') -> x.name = class'.name) character.classes
+  with
+  | Some _ -> failwith ("This class already exists on " ^ character.name)
+  | None -> { character with classes = class' :: character.classes }
+
+let drop_class (class' : class') (character : character) : character =
+  let rec drop_aux (classes : class' list) : class' list =
+    match classes with
+    | [] -> []
+    | h :: t -> if h.name = class'.name then t else h :: drop_aux t
+  in
+  { character with classes = drop_aux character.classes }
 
 (** Add an ability to the character's repertoire of abilities*)
 let add_ability ability character =
@@ -190,3 +209,33 @@ let rec has_skills (user : character) (required : (string * int) list) : bool =
       with
       | None -> false
       | Some _ -> has_skills user t)
+
+let gpa (user : character) : float =
+  let class_count = List.length user.classes in
+  if class_count = 0 then raise Not_found
+  else
+    let rec gpa_aux (classes : class' list) : float list =
+      match classes with
+      | [] -> []
+      | h :: t ->
+          (match h.grade with
+          | None -> 4.0
+          | Some (grade, _) -> (
+              match grade with
+              | x when x > 97 -> 4.3
+              | x when x > 93 -> 4.0
+              | x when x > 90 -> 3.7
+              | x when x > 87 -> 3.5
+              | x when x > 83 -> 3.3
+              | x when x > 80 -> 3.0
+              | x when x > 77 -> 2.7
+              | x when x > 73 -> 2.5
+              | x when x > 70 -> 2.3
+              | x when x > 67 -> 2.0
+              | x when x > 63 -> 1.5
+              | x when x > 60 -> 1.0
+              | _ -> 0.0))
+          :: gpa_aux t
+    in
+    List.fold_left (fun acc v -> acc +. v) 0.0 (gpa_aux user.classes)
+    /. float_of_int class_count
