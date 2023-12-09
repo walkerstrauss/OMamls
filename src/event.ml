@@ -29,7 +29,8 @@ let category_of_string (s : string) (env : Battle.env option) : category =
   | "Meeting", None -> Meeting
   | "Test", None -> Test
   | "Special", None -> Special
-  | "Battle", Some _ -> Battle []
+  | "Battle", Some env -> Battle env
+  | "Battle", None -> Battle []
   | _ -> failwith "Invalid category"
 
 (** Function to make an event *)
@@ -44,7 +45,12 @@ let event_to_string (ent : event) : string =
   ^ " mins)"
 
 let dinner =
-  { name = "Dinner"; duration = (1, 0); skill_effect = []; category = Special }
+  {
+    name = "Dinner";
+    duration = (1, 0);
+    skill_effect = [ ("placeholder", 1) ];
+    category = Special;
+  }
 
 let test =
   {

@@ -20,18 +20,6 @@ val items_helper : Csv.t -> item list
     returns the second element of the string list list which is an item list. 
     Note: only works for already defined abilities. *)
 
-(* val events : Csv.t -> event list *)
-(** Takes an argument of type [Csv.t] where the string list list is in the 
-    format: <[abilities], [items], [events], [locations]> and returns the third
-    element of the string list list, which is the event list. Note: only works
-    for already defined events. *)
-
-(* val locations : Csv.t -> location list *)
-(** Takes an argument of type [Csv.t] where the string list list is in the 
-    format: <[abilities], [items], [events], [locations]> and returns the head 
-    of the string list, which is the locations list. Note: only works for
-    already defined locations. *)
-
 val char_of_data : Csv.t -> string list -> string list -> character
 (** Takes an argument of type [Csv.t] and generates randomly named character 
     using abilities and items from csv file. *)
@@ -60,7 +48,7 @@ val items_of_csv : string -> item list
 (** Takes argument for filename and uses Csv module to create item list.
     Csv in format: [name], [description], [category], [fst], [snd] *)
 
-val events_of_data : Csv.t -> item list
+val events_of_data : Csv.t -> event list
 (** Takes argument of type [Csv.t] and generates event list*)
 
 val events_of_csv : string -> event list

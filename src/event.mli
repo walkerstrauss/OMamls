@@ -22,7 +22,7 @@ and category =
   | Special
   | Battle of Battle.env
 
-val category_of_string : string -> category
+val category_of_string : string -> Battle.env option -> category
 (** Uses pattern matching to turn string into category*)
 
 val make_event : string -> time -> (string * int) list -> category -> event

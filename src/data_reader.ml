@@ -23,20 +23,6 @@ let abilities_helper (lst : Csv.t) : ability list =
 let items_helper (lst : Csv.t) : item list =
   List.map (fun row -> Item.item_of_string (List.nth row 1)) lst
 
-(** Takes an argument of type [Csv.t] where the string list list is in the 
-    format: <[abilities], [items], [events], [locations]> and returns the third
-    element of the string list list, which is the event list. Note: only works
-   for already defined events. *)
-(* let events (lst : Csv.t) : event list =
-   List.map (fun row -> Event.event_of_string (List.nth row 2)) lst *)
-
-(** Takes an argument of type [Csv.t] where the string list list is in the 
-    format: <[abilities], [items], [events], [locations]> and returns the head 
-    of the string list, which is the locations list. Note: only works for 
-    already defined locations. *)
-(* let locations (lst : Csv.t) : location list =
-   List.map (fun row -> Location.location_of_string (List.nth row 3)) lst *)
-
 (** Takes an argument of type [Csv.t] and generates randomly named character 
     using abilities and items from csv file. *)
 let char_of_data lst first_names last_names =
@@ -121,7 +107,7 @@ let events_of_data d =
         (int_of_string (List.nth row 1), int_of_string (List.nth row 2))
       in
       let skill_effect = [ (List.nth row 3, int_of_string (List.nth row 4)) ] in
-      let category = Event.category_of_string (List.nth row 5) in
+      let category = Event.category_of_string (List.nth row 5) None in
       make_event name duration skill_effect category)
     d
 

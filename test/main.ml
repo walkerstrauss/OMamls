@@ -223,6 +223,37 @@ let d4 =
     ];
   ]
 
+let d5 =
+  [
+    [ "Test"; "1"; "30"; "placeholder"; "1"; "Test" ];
+    [ "Dinner"; "1"; "0"; "placeholder"; "1"; "Special" ];
+  ]
+
+(* let d6 =
+   [
+     [
+       "Dorm";
+       "West";
+       "Hans Bethe House";
+       "";
+       "";
+       "";
+       "";
+       "Test";
+       "1";
+       "30";
+       "placeholder";
+       "1";
+       "Test";
+       "Dinner";
+       "1";
+       "0";
+       "";
+       "";
+       "Special";
+     ];
+   ] *)
+
 let data_reader_tests =
   [
     ( "Test abilities_helper with d1" >:: fun _ ->
@@ -255,6 +286,11 @@ let data_reader_tests =
       assert_equal [ Item.iced_tea ] (Data_reader.items_of_data d4) );
     ( "Test items_of_data with []" >:: fun _ ->
       assert_equal [] (Data_reader.items_of_data []) );
+    ( "Test events_of_data with d5" >:: fun _ ->
+      assert_equal [ Event.test; Event.dinner ] (Data_reader.events_of_data d5)
+    );
+    ( "Test events_of_data with empty list" >:: fun _ ->
+      assert_equal [] (Data_reader.events_of_data []) );
   ]
 
 let test =

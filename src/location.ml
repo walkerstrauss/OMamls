@@ -54,7 +54,7 @@ let place_of_string_list (lst : string list) : place =
 
 (** Returns a tuple of the form ([campus], Some [name]) if the location has a
     name and the form (Outside, None) if the location is outside *)
-let get_place (loc : location) : campus * string option =
+let get_place_name (loc : location) : campus * string option =
   match loc.place with
   | Store (campus, name, _, _) -> (campus, Some name)
   | Hall (campus, name) -> (campus, Some name)
