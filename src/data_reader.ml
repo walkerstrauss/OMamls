@@ -1,27 +1,91 @@
 open Ability
 open Item
+open Event
+open Location
 open Csv
 open Character
 
-(** Function that takes a filename as input and returns a value of Csv.t where
-    the head of the value is the abilities list tail of the value is a list
-    containing the items list. *)
-let read_data filename =
+(** Function that takes a filename as input and returns a value of Csv.t. *)
+let read_data (filename : string) : Csv.t =
   let ic = open_in filename in
   let csv_chan = of_channel ~separator:',' ic in
   input_all csv_chan
 
-(** Takes an argument of type [Csv.t] where Csv.t is [string list list] and 
-    returns the head of the string list, which is the abilities list. *)
-let abilities lst =
+(** Takes an argument of type [Csv.t] where the string list list is in the 
+    format: <[abilities], [items], [events], [locations]> and returns the head 
+    of the string list list, which is the abilities list. *)
+let abilities_helper (lst : Csv.t) : ability list =
   List.map (fun row -> Ability.ability_of_string (List.hd row)) lst
 
-(** Takes an argument of type [Csv.t] where Csv.t is [string list list] and 
-    returns the second element of the string list list which is an item list. *)
-let items lst =
-  List.map (fun row -> Item.item_of_string (List.hd (List.tl row))) lst
+(** Takes an argument of type [Csv.t] where the string list list is in the 
+    format: <[abilities], [items], [events], [locations]>  and returns the 
+    second element of the string list list which is an item list. *)
+let items_helper (lst : Csv.t) : item list =
+  List.map (fun row -> Item.item_of_string (List.nth row 1)) lst
+
+(** Takes an argument of type [Csv.t] where the string list list is in the 
+    format: <[abilities], [items], [events], [locations]> and returns the third
+    element of the string list list, which is the event list. Note: only works
+   for already defined events. *)
+(* let events (lst : Csv.t) : event list =
+   List.map (fun row -> Event.event_of_string (List.nth row 2)) lst *)
+
+(** Takes an argument of type [Csv.t] where the string list list is in the 
+    format: <[abilities], [items], [events], [locations]> and returns the head 
+    of the string list, which is the locations list. Note: only works for 
+    already defined locations. *)
+(* let locations (lst : Csv.t) : location list =
+   List.map (fun row -> Location.location_of_string (List.nth row 3)) lst *)
 
 (** Takes an argument of type [Csv.t] and generates randomly named character 
     using abilities and items from csv file. *)
 let char_of_data lst first_names last_names =
-  generate (first_names, last_names) [] [] (abilities lst) (items lst) 2
+  generate (first_names, last_names) [] [] (abilities_helper lst)
+    (items_helper lst) 2
+
+(** Takes argument for filename and uses Csv module to create Csv.t of csv file 
+where each row represents an ability where <[name],[bool1] [description1] 
+[amount1], [bool2], [description2], [amount2] and inputs to create_ability are
+ in the format: 
+name = name
+requireed = []
+effect = 
+(if [bool1] = true then Some (create_effect description1 damage
+   (amount1)) else None, 
+   if [bool2] = true then Some (create_effect description2 damage
+   (amount2)) else None) *)
+let abilities_of_csv filename =
+  let bool_of_string s =
+    match s with
+    | "true" -> true
+    | "false" -> false
+    | _ -> failwith "not boolean str"
+  in
+  let data_lst = read_data filename in
+  List.map
+    (fun row ->
+      let name = List.hd row in
+      let bool1 = bool_of_string (List.nth row 1) in
+      let description1 = List.nth row 2 in
+      let effect1 =
+        if bool1 then
+          Some
+            (create_effect description1
+               [ (Damage (int_of_string (List.nth row 3)), 3) ])
+        else None
+      in
+      let bool2 = bool_of_string (List.nth row 4) in
+      let description2 = List.nth row 5 in
+      let effect2 =
+        if bool2 then
+          Some
+            (create_effect description2
+               [ (Damage (int_of_string (List.nth row 6)), 3) ])
+        else None
+      in
+      create_ability name [] (effect1, effect2))
+    data_lst
+
+(* let items_of_csv filename
+   let events_of_csv filename
+   let locations_of_csv filename *)
