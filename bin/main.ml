@@ -36,6 +36,14 @@ let last_names =
 let major_list = [ CS; ECE; MechE; ChemE; CivilE; IS ]
 
 (********** command line interface **********)
+let rec test (curr_day : day) (week : int) (character : character) : character =
+  if week = 15 then character
+  else
+    let character' = day character week in
+    let nxt_day = Journey.next_day curr_day in
+    let week' = if nxt_day = Monday then week + 1 else week in
+    test nxt_day week' character'
+
 let () =
   clear_terminal ();
   print_endline "\n\nWelcome to the Cornell RPG.\n";
@@ -75,14 +83,6 @@ let () =
     ("\nCharacter named " ^ charac.name ^ " majoring in " ^ major
    ^ " has been created.");
   print_endline "\nYour character is ready for battle.";
-  let charac_cpu =
-    add_item
-      (List.nth consumables_catelog 1)
-      (add_item
-         (List.hd consumables_catelog)
-         (generate (first_names, last_names) major_list [] Ability.abilities
-            Item.consumables_catelog 2))
-  in
   let battle_charac =
     add_item
       (List.nth consumables_catelog 1)
@@ -92,8 +92,11 @@ let () =
             (List.nth Ability.abilities 1)
             (add_ability (List.hd Ability.abilities) charac)))
   in
-  let x = summary (battle battle_charac charac_cpu) in
-  Printf.printf
-    "The battle has ended with %n cycles, %n turns, and %s as the victor!"
-    x.cycles x.turns
-    (match x.winner with None -> "No one" | Some person -> person.name)
+  let character' = test Monday 0 battle_charac in
+  (if Character.has_skills character' [ ("Internal Counter", 3) ] then
+     Printf.printf "Congratulations on completing the semester %s!"
+   else
+     Printf.printf
+       "You have failed to complete the semester %s! You will be coming back \
+        next year...")
+    character'.name
