@@ -235,10 +235,10 @@ let d6 =
       "Dorm";
       "West";
       "Hans Bethe House";
-      "";
-      "";
-      "";
-      "";
+      "a";
+      "a";
+      "a";
+      "a";
       "Dinner";
       "1";
       "0";
@@ -299,6 +299,10 @@ let data_reader_tests =
       assert_equal
         [ Location.hans_bethe_house ]
         (d6 |> Data_reader.locations_of_data) );
+    ( "Test locations_of_data with csv file" >:: fun _ ->
+      assert_equal
+        [ Location.hans_bethe_house ]
+        (Data_reader.locations_of_csv "Example1.csv") );
   ]
 
 let test =
