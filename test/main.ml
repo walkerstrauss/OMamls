@@ -302,7 +302,7 @@ let data_reader_tests =
     ( "Test locations_of_data with csv file" >:: fun _ ->
       assert_equal
         [ Location.hans_bethe_house ]
-        (Data_reader.locations_of_csv "Example1.csv") );
+        (Data_reader.locations_of_csv "data/Example1.csv") );
   ]
 
 let test =
