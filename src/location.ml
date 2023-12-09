@@ -68,3 +68,11 @@ let hans_bethe_house =
     place = Dorm (West, "Hans Bethe House");
     events = [ Event.dinner; Event.test ];
   }
+
+let rec same_campus_list (campus : campus) (locations : location list): location list = 
+  let checker (loc : location) = 
+    if (campus = fst (get_place loc)) then true else false in 
+  match locations with 
+  | [] -> []
+  | loct :: t when (checker loct) -> loct :: same_campus_list t
+  | _ -> same_campus_list t
