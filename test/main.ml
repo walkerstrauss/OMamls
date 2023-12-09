@@ -254,8 +254,28 @@ let d6 =
     ];
   ]
 
-let data_reader_tests =
+let data_reader_tests1 =
   [
+    ( "Test read_data with data/Example1.csv" >:: fun _ ->
+      assert_equal
+        [
+          [
+            "Outside";
+            "West";
+            "a";
+            "a";
+            "a";
+            "a";
+            "a";
+            "Test";
+            "1";
+            "30";
+            "placeholder";
+            "1";
+            "Test";
+          ];
+        ]
+        (Data_reader.read_data "data/Example1.csv") );
     ( "Test abilities_helper with d1" >:: fun _ ->
       assert_equal
         [ Ability.punch; Ability.slap ]
@@ -276,6 +296,10 @@ let data_reader_tests =
       assert_equal
         [ Item.ipad; Item.mac; Item.celcius ]
         (Data_reader.items_helper d2) );
+  ]
+
+let data_reader_tests2 =
+  [
     ( "Test abilities_of_data with d3" >:: fun _ ->
       assert_equal
         [ Ability.punch; Ability.slap ]
@@ -313,7 +337,8 @@ let test =
            battle_tests;
            ability_tests;
            item_tests;
-           data_reader_tests;
+           data_reader_tests1;
+           data_reader_tests2;
          ]
 
 let _ = run_test_tt_main test
