@@ -3,29 +3,35 @@ open Item
 open Ability
 open Helper
 
+(**A type to tell whose turn it currently is in a state*)
 type turn = User | Opponent | End of turn
+
 type battle_character = character * (effect_type * int) list
+(** The character type while during a battle where it includes both the 
+    character and the long term effects on the character*)
+
 type state = battle_character * turn * battle_character
+(** State of the battle. The point where the players are during a certain turn 
+    in the battle*)
+
 type env = state list
+(**The collection of states that make up a battle start to finish*)
 
 type battle_summary = {
   winner : character option;
   loser : character option;
   cycles : int;
   turns : int;
-  env : env;
+  env : env;  (** Type representing summary of battle *)
 }
 
+(** Prints out a message, and requests for the User to make a choice.*)
 let get_user_choice (message : string) =
   print_endline message;
   print_string "> "
 
-let rec read_int_rec x : int =
-  try
-    let ln = read_line x in
-    int_of_string (String.trim ln)
-  with Failure _ -> read_int_rec x
-
+(** Creates a message string of the list of abilities the character has 
+  currently to be used to attack.*)
 let print_abilities (character : character) : string =
   let print_ability (ability : ability option) : string =
     match ability with None -> "No Ability" | Some a -> a.name
@@ -39,6 +45,13 @@ let print_abilities (character : character) : string =
   ^ "\n 4. "
   ^ print_ability (List.nth character.abilities 3)
   ^ "\n"
+
+(** Recursively prints int *)
+let rec read_int_rec x : int =
+  try
+    let ln = read_line x in
+    int_of_string (String.trim ln)
+  with Failure _ -> read_int_rec x
 
 let print_inventory (character : character) : string =
   let init =
@@ -164,6 +177,9 @@ and use_item (character : battle_character) (item : item) : battle_character =
       (snd (remove_item item (change_hp inc (fst character))), snd character)
   | _ -> failwith "Can't use that here!"
 
+(** Attacks from character 1 onto character 2. Character 1 has the option of using four abilities, 
+    if the ability is none then the character gets to choose their attack abilities again! 
+        Returns the new state of each character. *)
 let rec attack (state : state) (n : int) : state =
   let er, ee, comp =
     match state with
@@ -184,6 +200,8 @@ let rec attack (state : state) (n : int) : state =
       Printf.printf "No ability.\n";
       state
 
+(** Checks the character's item, and allows the character to use the item during battle for one turn.
+    If item isn't of type consumable, then the character gets to choose another item again. *)
 and item (character : battle_character) (n : int) : battle_character =
   match List.nth_opt (fst character).inventory (n - 1) with
   | Some i -> use_item character i
@@ -191,6 +209,8 @@ and item (character : battle_character) (n : int) : battle_character =
       Printf.printf "No item used!\n";
       character
 
+(** Creates a probability if the character is successful at escaping and fleeing the battle. If successful, raises 
+    an error, otherwise returns the character. *)
 and flee (env : env) : env =
   match Random.int 1000 < 25 with
   | true -> (
@@ -208,6 +228,10 @@ and flee (env : env) : env =
           turn ((user, User, opp) :: env)
       | _ -> raise (Invalid_argument "Unreachable"))
 
+(** Character move during battle. During this move, the character has the option
+    of attack, item, and flee. Depending on the choice made, the character's 
+    status or health changes. If the option wasn't either attack, item or flee,
+    then the character gets to make the same choice again.*)
 and turn (env : env) : env =
   match List.hd env with
   | user, User, opp -> (
@@ -272,6 +296,7 @@ and turn (env : env) : env =
 let battle (user : character) (opp : character) : env =
   turn [ ((user, []), User, (opp, [])) ]
 
+(** Function that creates a value of type [battle_summary] from the env. *)
 let summary (env : env) : battle_summary =
   let rec summary_aux (env : env) (curr : battle_summary) =
     match env with

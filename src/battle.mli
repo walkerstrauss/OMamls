@@ -13,13 +13,24 @@ type state = battle_character * turn * battle_character
 type env = state list
 (**The collection of states that make up a battle start to finish*)
 
-(** Prints out a message, and requests for the User to make a choice.*)
+type battle_summary = {
+  winner : character option;
+  loser : character option;
+  cycles : int;
+  turns : int;
+  env : env;
+}
+(** Type representing summary of battle *)
+
 val get_user_choice : string -> unit
 (** Prints out a message, and requests for the User to make a choice.*)
 
 val print_abilities : character -> string
 (** Creates a message string of the list of abilities the character has 
     currently to be used to attack.*)
+
+val read_int_rec : unit -> int
+(** Recursively prints int *)
 
 val print_inventory : character -> string
 (** Creates a message string of the list of items the character has currently 
@@ -60,12 +71,5 @@ val battle : character -> character -> env
 (** Creates a battle sequence between two characters. Depending on the outcome, 
     returns the user's updated character status after the battle. *)
 
-type battle_summary = {
-  winner : character option;
-  loser : character option;
-  cycles : int;
-  turns : int;
-  env : env;
-}
-
 val summary : env -> battle_summary
+(** Function that creates a value of type [battle_summary] from the env. *)
