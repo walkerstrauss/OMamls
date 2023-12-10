@@ -1,10 +1,3 @@
-(**
-A type with:
-Damage of the amount of damage dealt
-TurnSkip with the probability that it skips a turn
-Debuff with the skill option and percentage of skill loss
-Buff with the skill option and percentage of skill gain
-*)
 type effect_type =
   | Damage of int (*Damage with an int of how much damage is to be done*)
   | TurnSkip of int
@@ -20,6 +13,13 @@ type effect_type =
       probability out of 100*)
   | AddItem (*Add item to a players inventory*)
   | RemoveItem (*Remove item from a players inventory*)
+      (**
+  A type with:
+  Damage of the amount of damage dealt
+  TurnSkip with the probability that it skips a turn
+  Debuff with the skill option and percentage of skill loss
+  Buff with the skill option and percentage of skill gain
+  *)
 
 type effect = { description : string; effect : (effect_type * int) list }
 (**Record of the effect with its name
@@ -45,9 +45,13 @@ val create_effect : string -> (effect_type * int) list -> effect
     Returns an effect*)
 
 val punch : ability
+(** Ability representing a punch. *)
 val slap : ability
+(** Ability representing a slap. *)
 val throw_item : ability
+(** Ability representing throwing an item. *)
 val meditate : ability
+(** Ability representing meditating. *)
 
 val ability_of_string : string -> ability
 (** Function that returns ability associated with input string *)
