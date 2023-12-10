@@ -177,5 +177,10 @@ and item (user : character): character =
     | None -> (Printf.printf "No item used!\n"; user)
 
 let day_cycle (char1 : character) (week : int) (day : weekday): character =
-  let message = ("Currently it is week " ^ string_of_int week ^ ". The day is " ^ weekday_to_string day)
-  in Printf.printf "%s" message; (cycles morrison_hall (8, 0) (week) (day))
+  let message = ("Currently it is week " 
+    ^ string_of_int week 
+    ^ ". The day is " 
+    ^ weekday_to_string day ".")
+  in 
+  Printf.printf "%s" message; (cycles morrison_hall (8, 0) (week) (day))
+  
