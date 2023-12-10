@@ -44,3 +44,8 @@ let take_prelim (preparedness : int) (class' : class') : class' =
             Some (((init * count) + grade) / (count + 1), count + 1)
       in
       { class' with prelims = t; grade = total_grade }
+
+
+let courses_list: class' list = 
+[(create_class "CS1110" 3); 
+(create_class "ENGL1710" 1)]

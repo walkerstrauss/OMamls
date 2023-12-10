@@ -55,7 +55,6 @@ let () =
   print_endline
     ("\nCharacter named " ^ charac.name ^ " majoring in " ^ major
    ^ " has been created.");
-  print_endline "\nYour character is ready for battle.";
   let battle_charac =
     add_item
       (List.nth consumables_catelog 1)

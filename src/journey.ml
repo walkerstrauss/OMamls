@@ -122,8 +122,7 @@ let rec cycle (location : location) (time : time) (user : character)
     | 3 ->
         if outside then (item user, time, location)
         else (
-          Printf.printf "Exiting the building.%s"
-            (print_current_location location);
+          Printf.printf "Exiting the building.\n";
           (user, time, out_loc_of_campus location))
     | _ -> failwith "Unreachable"
   in
@@ -186,12 +185,12 @@ and action (user : character) (time : time) (location : location) (week : int)
         in
         match course with
         | None ->
-            Printf.printf "Currently %s has no prelims today!" user.name;
+            Printf.printf "Currently %s has no prelims today!\n" user.name;
             let user', _, _ = action user time location week day in
             user'
         | Some mat ->
             let new_course = Class.take_prelim amount mat in
-            Printf.printf "%s took the %s prelim!" user.name new_course.name;
+            Printf.printf "%s took the %s prelim!\n" user.name new_course.name;
             overwrite_class mat user)
     | Battle -> (
         let result =
@@ -203,14 +202,14 @@ and action (user : character) (time : time) (location : location) (week : int)
         in
         match result.winner with
         | Some player when player.name = user.name ->
-            Printf.printf "%s has won the battle!" player.name;
+            Printf.printf "%s has won the battle!\n" player.name;
             player
         | Some _ -> (
-            Printf.printf "%s has lost the battle!" user.name;
+            Printf.printf "%s has lost the battle!\n" user.name;
             match result.loser with
             | Some player -> player
             | None -> failwith "Unreachable"))
-    | _ -> (Printf.printf "decided to do %s !" event.name;
+    | _ -> (Printf.printf "decided to do %s !\n" event.name;
             List.fold_left
               (fun char1 (skill, amount) -> update_skill amount skill char1)
               user event.skill_effect)
@@ -225,13 +224,13 @@ and item (user : character) : character =
   match List.nth_opt user.inventory (choice - 1) with
   | Some i -> item_use user i
   | None ->
-      Printf.printf "No item used!\n";
+      Printf.printf "No items used!\n";
       user
 
 and day_cycle (char1 : character) (week : int) (day : weekday) : character =
   let message =
     "Currently it is week " ^ string_of_int week ^ ". The day is "
-    ^ weekday_to_string day ^ "."
+    ^ weekday_to_string day ^ ".\n"
   in
   Printf.printf "%s" message;
   cycle morrison_hall (8, 0) char1 week day
