@@ -34,7 +34,7 @@ let create name major ability_amt max_hp brbs =
     health = (max_hp, max_hp);
     major;
     battle_power = 0;
-    skills = [("Happiness", 50); ("Intellegence", 1); ("Strength", 1)];
+    skills = [ ("Happiness", 50); ("Intellegence", 1); ("Strength", 1) ];
     abilities = abilities_list ability_amt [];
     inventory = [];
     status = Alive;
@@ -136,6 +136,7 @@ let remove_item item character =
   let item', inventory' = remove_aux item character.inventory in
   (item', { character with inventory = inventory' })
 
+(**Adds a class to a character's classes*)
 let add_class (class' : class') (character : character) : character =
   match
     List.find_opt (fun (x : class') -> x.name = class'.name) character.classes
@@ -143,6 +144,7 @@ let add_class (class' : class') (character : character) : character =
   | Some _ -> failwith ("This class already exists on " ^ character.name)
   | None -> { character with classes = class' :: character.classes }
 
+(**Drops the given class from the character's classes*)
 let drop_class (class' : class') (character : character) : character =
   let rec drop_aux (classes : class' list) : class' list =
     match classes with
@@ -152,13 +154,13 @@ let drop_class (class' : class') (character : character) : character =
   { character with classes = drop_aux character.classes }
 
 (** Overwrite a class properties in a player's schedule of classes. *)
-let overwrite_class (course : class') (character : character): character =
-  let rec overwrite (course_lst : class' list): class' list =
+let overwrite_class (course : class') (character : character) : character =
+  let rec overwrite (course_lst : class' list) : class' list =
     match course_lst with
-    | h :: t -> (if (h.name = course.name) then (course :: t) else (h :: overwrite t))
+    | h :: t -> if h.name = course.name then course :: t else h :: overwrite t
     | [] -> []
   in
-  { character with classes = (overwrite character.classes) }
+  { character with classes = overwrite character.classes }
 
 (** Add an ability to the character's repertoire of abilities*)
 let add_ability ability character =
@@ -209,6 +211,7 @@ let abilities_to_list character =
   in
   converter character.abilities
 
+(**Returns whether or not user has all of the skills in required*)
 let rec has_skills (user : character) (required : (string * int) list) : bool =
   match required with
   | [] -> true
@@ -219,6 +222,7 @@ let rec has_skills (user : character) (required : (string * int) list) : bool =
       | None -> false
       | Some _ -> has_skills user t)
 
+(**Returns the gpa of the given character, user*)
 let gpa (user : character) : float =
   let class_count = List.length user.classes in
   if class_count = 0 then raise Not_found
@@ -267,7 +271,7 @@ let first_names =
     "Nathan";
     "Lucas";
     "Jordan";
-    "Reynold"
+    "Reynold";
   ]
 
 (** List of last names for character NPC/Ai generation. *)
