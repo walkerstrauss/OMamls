@@ -19,17 +19,17 @@ and category =
   | Battle
 
 (** Uses pattern matching to turn string into category*)
-let category_of_string (s : string) (env : Battle.env option) : category =
-  match (s, env) with
-  | "Idle", None -> Idle
-  | "Travel", None -> Travel
-  | "Lecture", None -> Lecture
-  | "Discussion", None -> Discussion
-  | "Party", None -> Party
-  | "Meeting", None -> Meeting
-  | "Test", None -> Test
-  | "Special", None -> Special
-  | "Battle", None -> Battle
+let category_of_string (s : string) : category =
+  match s with
+  | "Idle" -> Idle
+  | "Travel" -> Travel
+  | "Lecture" -> Lecture
+  | "Discussion" -> Discussion
+  | "Party" -> Party
+  | "Meeting" -> Meeting
+  | "Test" -> Test
+  | "Special" -> Special
+  | "Battle" -> Battle
   | _ -> failwith "Invalid category"
 
 (** Function to make an event *)
@@ -43,25 +43,9 @@ let event_to_string (ent : event) : string =
   ent.name ^ " -> (" ^ string_of_int hour ^ " hrs & " ^ string_of_int min
   ^ " mins)"
 
-let dinner =
-  {
-    name = "Dinner";
-    duration = (1, 0);
-    skill_effect = [ ("placeholder", 1) ];
-    category = Special;
-  }
-
-let fight = make_event ("Fight someone")
-  (1,45) ([]) Battle
-
-let test =
-  {
-    name = "Test";
-    duration = (1, 30);
-    skill_effect = [];
-    category = Test;
-  }
-
+let dinner = make_event "Dinner" (1, 0) [ ("placeholder", 1) ] Special
+let test = make_event "Test" (1, 30) [ ("placeholder", 1) ] Test
+let fight = make_event ("Fight someone") (1,45) ([]) Battle
 let sleep_in : event =
   {
     name = "Sleep in (1 hour)";
