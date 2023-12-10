@@ -20,7 +20,7 @@ and category =
   | Meeting
   | Test
   | Special
-  | Battle of Battle.env
+  | Battle
 
 val category_of_string : string -> Battle.env option -> category
 (** Uses pattern matching to turn string into category*)
@@ -32,4 +32,5 @@ val event_to_string : event -> string
 (** Function that turns event to string*)
 
 val dinner : event
+
 val test : event

@@ -5,45 +5,17 @@ open Item
 open Journey
 open Helper
 
-let first_names =
-  [
-    "Walker";
-    "Talia";
-    "Momo";
-    "Greg";
-    "Cyrus";
-    "Billy";
-    "Lily";
-    "Melissa";
-    "Chris";
-    "John";
-  ]
-
-let last_names =
-  [
-    "Strauss";
-    "Rubeo";
-    "Shummo";
-    "Guerrier";
-    "Irani";
-    "Simonelli";
-    "Winagle";
-    "Eckert";
-    "Stewart";
-    "Smith";
-  ]
-
 let major_list = [ CS; ECE; MechE; ChemE; CivilE; IS ]
 
 (********** command line interface **********)
-let rec progression (curr_day : day) (week : int) (character : character) :
+let rec progression (curr_day : weekday) (week : int) (character : character) :
     character =
   if week = 15 then character
   else
-    let character' = day character week in
+    let character' = day_cycle character week curr_day in
     let nxt_day = Journey.next_day curr_day in
     let week' = if nxt_day = Monday then week + 1 else week in
-    test nxt_day week' character'
+    progression nxt_day week' character'
 
 let () =
   clear_terminal ();

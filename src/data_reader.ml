@@ -141,7 +141,7 @@ let locations_of_data d =
     | _ -> failwith "String list list is in wrong format"
   in
   List.map
-    (fun row ->
+    (fun (row : string list) ->
       let place = Location.place_of_string_list row in
       let row2 = drop 7 row in
       let ev_lst = events row2 [] in

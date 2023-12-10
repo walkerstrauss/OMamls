@@ -14,9 +14,9 @@ and category =
   | Discussion
   | Party
   | Meeting
-  | Test
+  | Test 
   | Special
-  | Battle of Battle.env
+  | Battle 
 
 (** Uses pattern matching to turn string into category*)
 let category_of_string (s : string) (env : Battle.env option) : category =
@@ -29,8 +29,7 @@ let category_of_string (s : string) (env : Battle.env option) : category =
   | "Meeting", None -> Meeting
   | "Test", None -> Test
   | "Special", None -> Special
-  | "Battle", Some env -> Battle env
-  | "Battle", None -> Battle []
+  | "Battle", None -> Battle 
   | _ -> failwith "Invalid category"
 
 (** Function to make an event *)

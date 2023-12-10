@@ -34,7 +34,7 @@ let create name major ability_amt max_hp brbs =
     health = (max_hp, max_hp);
     major;
     battle_power = 0;
-    skills = [];
+    skills = [("Happiness", 50); ("Intellegence", 1); ("Strength", 1)];
     abilities = abilities_list ability_amt [];
     inventory = [];
     status = Alive;
@@ -151,6 +151,15 @@ let drop_class (class' : class') (character : character) : character =
   in
   { character with classes = drop_aux character.classes }
 
+(** Overwrite a class properties in a player's schedule of classes. *)
+let overwrite_class (course : class') (character : character): character =
+  let rec overwrite (course_lst : class' list): class' list =
+    match course_lst with
+    | h :: t -> (if (h.name = course.name) then (course :: t) else (h :: overwrite t))
+    | [] -> []
+  in
+  { character with classes = (overwrite character.classes) }
+
 (** Add an ability to the character's repertoire of abilities*)
 let add_ability ability character =
   let rec add_aux abilities =
@@ -239,3 +248,41 @@ let gpa (user : character) : float =
     in
     List.fold_left (fun acc v -> acc +. v) 0.0 (gpa_aux user.classes)
     /. float_of_int class_count
+
+(** List of first names for character NPC/Ai generation. *)
+let first_names =
+  [
+    "Walker";
+    "Talia";
+    "Momo";
+    "Greg";
+    "Cyrus";
+    "Billy";
+    "Lily";
+    "Melissa";
+    "Chris";
+    "John";
+    "Mohammed";
+    "Sophie";
+    "Nathan";
+    "Lucas";
+    "Jordan";
+    "Reynold"
+  ]
+
+(** List of last names for character NPC/Ai generation. *)
+let last_names =
+  [
+    "Strauss";
+    "Rubeo";
+    "Shummo";
+    "Guerrier";
+    "Irani";
+    "Simonelli";
+    "Winagle";
+    "Eckert";
+    "Stewart";
+    "Smith";
+    "Cambry";
+    "Jefferson";
+  ]

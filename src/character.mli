@@ -65,6 +65,7 @@ val remove_item : item -> character -> item option * character
 
 val add_class : class' -> character -> character
 val drop_class : class' -> character -> character
+val overwrite_class : class' -> character -> character
 
 val add_ability : ability -> character -> character
 (**Add the inputted ability to the character
@@ -88,3 +89,5 @@ val abilities_to_list : character -> string list
 
 val has_skills : character -> (string * int) list -> bool
 val gpa : character -> float
+val first_names : string list
+val last_names : string list

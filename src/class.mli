@@ -8,4 +8,5 @@ type class' = {
 
 val generate_prelim : unit -> prelim
 val create_class : string -> int -> class'
+val prelim_date_checker : prelim list -> int -> int -> bool
 val take_prelim : int -> class' -> class'

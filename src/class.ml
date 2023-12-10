@@ -26,6 +26,12 @@ let create_class (name : string) (prelim_count : int) : class' =
   in
   { name; prelims = generate_prelim_list prelim_count; grade = None }
 
+let rec prelim_date_checker (prelims : prelim list) (week: int) (day : int): bool = 
+  match prelims with 
+  | [] -> false
+  | (tst_day, tst_week) :: t when ((tst_day = day) && (tst_week = week)) -> true
+  | _ :: t -> prelim_date_checker t week day 
+
 let take_prelim (preparedness : int) (class' : class') : class' =
   match class'.prelims with
   | [] -> class'
