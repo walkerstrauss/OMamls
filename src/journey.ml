@@ -209,13 +209,11 @@ and action (user : character) (time : time) (location : location) (week : int)
             Printf.printf "%s has lost the battle!" user.name;
             match result.loser with
             | Some player -> player
-            | None -> failwith "Unreachable")
-        | _ ->
-            Printf.printf "decided to do %s !" event.name;
+            | None -> failwith "Unreachable"))
+    | _ -> (Printf.printf "decided to do %s !" event.name;
             List.fold_left
               (fun char1 (skill, amount) -> update_skill amount skill char1)
               user event.skill_effect)
-    | _ -> failwith "Todo"
   in
   let user' = updated_user in
   if user'.status = Dead then
