@@ -48,7 +48,7 @@ let test = make_event "Test" (1, 30) [ ("placeholder", 1) ] Test
 let fight = make_event ("Fight someone") (1,45) ([]) Battle
 let sleep_in : event =
   {
-    name = "Sleep in (1 hour)";
+    name = "Sleep in";
     duration = (1, 0);
     skill_effect = [ ("Intelligence", 0); ("Happiness", 10) ];
     category = Idle;

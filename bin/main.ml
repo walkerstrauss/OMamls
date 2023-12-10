@@ -53,7 +53,7 @@ let () =
   in
   print_endline ("Your character major will be " ^ major2 ^ ".");
   print_endline
-    ("\nCharacter named " ^ charac.name ^ " majoring in " ^ major
+    ("\nCharacter named " ^ charac.name ^ " majoring in " ^ major2
    ^ " has been created.");
   let battle_charac =
     add_item
@@ -64,7 +64,7 @@ let () =
             (List.nth Ability.abilities 1)
             (add_ability (List.hd Ability.abilities) charac)))
   in
-  let character' = progression Monday 0 battle_charac in
+  let character' = progression Monday 1 battle_charac in
   (if Character.gpa character' > 3.0 then
      Printf.printf "Congratulations on completing the semester %s!"
    else

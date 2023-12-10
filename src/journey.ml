@@ -46,7 +46,9 @@ let print_events_options (lst : event list) : string =
     match events with
     | [] -> ""
     | h :: t ->
-        string_of_int count ^ ": " ^ h.name ^ "\n" ^ events_print t (count + 1)
+        string_of_int count ^ ": " 
+        ^ event_to_string h ^ "\n" 
+        ^ events_print t (count + 1)
   in
   init ^ events_print lst 1
 
@@ -126,7 +128,7 @@ let rec cycle (location : location) (time : time) (user : character)
           (user, time, out_loc_of_campus location))
     | _ -> failwith "Unreachable"
   in
-  let hour, _ = time in
+  let hour, _ = new_time in
   match hour with
   | i when i > 23 ->
       print_endline "You are done for the day!";
@@ -193,7 +195,7 @@ and action (user : character) (time : time) (location : location) (week : int)
             Printf.printf "%s took the %s prelim!\n" user.name new_course.name;
             overwrite_class mat user)
     | Battle -> (
-        let result =
+        let result = Printf.printf "%s started a fight!\n" user.name;
           summary
             (battle user
                (generate (first_names, last_names) [ CS; ECE; MechE ]
@@ -207,9 +209,9 @@ and action (user : character) (time : time) (location : location) (week : int)
         | Some _ -> (
             Printf.printf "%s has lost the battle!\n" user.name;
             match result.loser with
-            | Some player -> player
+            | Some player -> change_hp (-500) player
             | None -> failwith "Unreachable"))
-    | _ -> (Printf.printf "decided to do %s !\n" event.name;
+    | _ -> (Printf.printf "%s decided to do %s!\n" user.name event.name;
             List.fold_left
               (fun char1 (skill, amount) -> update_skill amount skill char1)
               user event.skill_effect)
