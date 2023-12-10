@@ -106,7 +106,9 @@ let morrison_hall : location =
 
 let hans_bethe_house =
   {
-    place = Dorm (West, "Hans Bethe House");
+    place =
+      place_of_string_list
+        [ "Dorm"; "West"; "Hans Bethe House"; ""; ""; ""; "" ];
     events = [ Event.dinner; Event.test ];
   }
 

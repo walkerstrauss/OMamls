@@ -260,13 +260,19 @@ let data_reader_tests1 =
       assert_equal
         [
           [
-            "Outside";
+            "Dorm";
             "West";
+            "Hans Bethe House";
             "a";
             "a";
             "a";
             "a";
-            "a";
+            "Dinner";
+            "1";
+            "0";
+            "placeholder";
+            "1";
+            "Special";
             "Test";
             "1";
             "30";

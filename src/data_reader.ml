@@ -107,7 +107,7 @@ let events_of_data d =
         (int_of_string (List.nth row 1), int_of_string (List.nth row 2))
       in
       let skill_effect = [ (List.nth row 3, int_of_string (List.nth row 4)) ] in
-      let category = Event.category_of_string (List.nth row 5) None in
+      let category = Event.category_of_string (List.nth row 5) in
       make_event name duration skill_effect category)
     d
 
@@ -134,9 +134,7 @@ let locations_of_data d =
     match lst with
     | [] -> acc
     | h :: h2 :: h3 :: h4 :: h5 :: h6 :: t ->
-        let acc2 =
-          acc @ [ List.hd (events_of_data [ [ h; h2; h3; h4; h5; h6 ] ]) ]
-        in
+        let acc2 = acc @ events_of_data [ [ h; h2; h3; h4; h5; h6 ] ] in
         events t acc2
     | _ -> failwith "String list list is in wrong format"
   in
