@@ -64,8 +64,18 @@ val remove_item : item -> character -> item option * character
     and the character with its inventory appropriately altered*)
 
 val add_class : class' -> character -> character
+(**Adds a given class to the character's courseload, returning the new character
+  with the added class when finished. If this class is already added, this 
+  method fails.
+    *)
+
 val drop_class : class' -> character -> character
+(**Drops a given class from the character's courseload, returning the new 
+    character with the dropped class when finished. If the character does not
+    already have this class, it is returned unchanged.*)
+
 val overwrite_class : class' -> character -> character
+(**Overwrites a given class' properties in a character's list of classes.*)
 
 val add_ability : ability -> character -> character
 (**Add the inputted ability to the character
@@ -88,6 +98,17 @@ val abilities_to_list : character -> string list
     Returns the name of the character's abilities*)
 
 val has_skills : character -> (string * int) list -> bool
+(**Returns whether or not a character has each of the given skills in the 
+    given skill list. If it doesn't have one of the skills in the list, this 
+    method returns false.*)
+
 val gpa : character -> float
+(**Calculates the character's gpa from all the classes they are currently taking,
+    returning the overall GPA as a float. If they have no classes, or no grade,
+    it counts as a 4.0*)
+
 val first_names : string list
+(**List of first names used for NPCs that you can fight*)
+
 val last_names : string list
+(**List of last names used for NPCs that you can fight*)
