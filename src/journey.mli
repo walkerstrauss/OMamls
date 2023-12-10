@@ -6,7 +6,7 @@ open Item
 (** Days of the week. *)
 type weekday = Monday | Tuesday | Wednesday | Thursday | Friday
 
-val all_locations_list : location list
+(* val all_locations_list : location list *)
 (** Represents all the locations in the game. *)
 
 val weekday_to_string : weekday -> string

@@ -102,7 +102,14 @@ let place_of_string_list (lst : string list) : place =
 let outside_west = { place = Outside West; events = [] }
 
 let morrison_hall : location =
-  { place = Dorm (North, "Toni Morrison Hall"); events = [ Event.sleep_in ] }
+  { place = Dorm (North, "Toni Morrison Hall"); 
+    events = [ Event.sleep_in; 
+    (make_event 
+      ("Studying")
+    (1,10)
+    ([("Intelligence", 4);
+    ("Happiness", -1)])
+    Idle) ] }
 
 let hans_bethe_house =
   {
@@ -123,3 +130,142 @@ let rec same_campus_list (campus : campus) (locations : location list) :
   | loct :: t when checker1 loct && checker2 loct ->
       loct :: same_campus_list campus t
   | _ :: t -> same_campus_list campus t
+
+let create_location (plac : place) (ent: event list): location = 
+  {place = plac; events = ent} 
+
+let all_locations_list = 
+[
+  morrison_hall;
+  (create_location 
+    (Outside North) 
+    ([(make_event 
+      ("Cloud Watch")
+      (1,0)
+      ([("Happiness", 10)])
+      Idle);
+      (make_event 
+      ("Fight someone")
+      (1,45)
+      ([])
+      Battle)]));
+  (create_location 
+    (Outside West) 
+    ([(make_event 
+      ("Sit on the slope")
+      (1,0)
+      ([("Happiness", 10)])
+      Idle);
+      (make_event 
+      ("Fight someone")
+      (1,45)
+      ([])
+      Battle)]));
+  (create_location 
+    (Outside South) 
+    ([(make_event 
+      ("Walk down a trail")
+      (2,0)
+      ([("Happiness", 10)])
+      Idle);
+      (make_event 
+      ("Fight someone")
+      (1,45)
+      ([])
+      Battle);
+    ]));
+  (create_location 
+    (Outside Central) 
+    ([(make_event 
+      ("People watching on Ho Plaza")
+      (1,10)
+      ([("Happiness", 10)])
+      Idle);
+      (make_event 
+      ("Fight someone")
+      (1,45)
+      ([])
+      Battle)
+    ]));
+  (create_location 
+    (Dorm (North, "Dickson")) 
+    ([(make_event 
+      ("Studying")
+      (1,10)
+      ([("Intelligence", 4); ("Happiness", -4)])
+      Idle);
+      (make_event 
+      ("Nap")
+      (0,45)
+      ([("Happiness", 5)])
+      Idle); 
+      Event.fight
+    ]));
+  (create_location 
+    (Hall (North, "Helen Newman")) 
+    ([(make_event 
+      ("Exercise!")
+      (3,0)
+      ([("Strength", 4); ("Happiness", 1)])
+      Idle);
+      (make_event 
+      ("Socialize")
+      (1,30)
+      ([("Happiness", 6);
+      ("Confidence", 1)])
+      Idle);
+      Event.fight
+    ]));
+  (create_location 
+    (Hall (Central, "Statler Hall")) 
+    ([(make_event 
+      ("Attending lecture")
+      (1,10)
+      ([("Intelligence", 4); ("Happiness", -4)])
+      Special);
+      Event.test;
+      Event.fight
+    ]));
+  (create_location 
+    (Hall (Central, "Duffield")) 
+    ([(make_event 
+      ("Studying")
+      (1,10)
+      ([("Intelligence", 4); ("Happiness", -1)])
+      Idle);
+      (make_event 
+      ("Nap")
+      (0,45)
+      ([("Happiness", 5)])
+      Idle);
+      Event.fight
+    ]));
+  (create_location 
+    (Dorm (West, "Hans Bethe")) 
+    ([(make_event 
+      ("Studying")
+      (1,10)
+      ([("Intelligence", 4); ("Happiness", -1)])
+      Idle);
+      (make_event 
+      ("Nap")
+      (0,45)
+      ([("Happiness", 5)])
+      Idle);
+      Event.fight
+    ]));
+  (create_location 
+    (Dorm (West, "Alice Cook")) 
+    ([(make_event 
+      ("Studying")
+      (1,10)
+      ([("Intelligence", 4); ("Happiness", -1)])
+      Idle);
+      (make_event 
+      ("Nap")
+      (0,45)
+      ([("Happiness", 5)])
+      Idle);
+      Event.fight
+    ]));
+]

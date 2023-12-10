@@ -34,3 +34,4 @@ val event_to_string : event -> string
 val dinner : event
 val sleep_in : event
 val test : event
+val fight : event

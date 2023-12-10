@@ -6,7 +6,7 @@ open Item
 
 type weekday = Monday | Tuesday | Wednesday | Thursday | Friday
 
-let all_locations_list = Data_reader.locations_of_csv "data/Location.csv"
+(* let all_locations_list = Data_reader.locations_of_csv "data/Location.csv" *)
 
 let weekday_to_string (day : weekday) : string =
   match day with
@@ -162,7 +162,7 @@ and move (user : character) (time : time) (location : location) =
       let choice =
         read_int_rec (get_user_choice (print_location_options loc_of_campus))
       in
-      (user, add_time time (0, 10), List.nth all_locations_list (choice - 1))
+      (user, add_time time (0, 10), List.nth loc_of_campus (choice - 1))
   | _ -> failwith "Todo"
 
 and action (user : character) (time : time) (location : location) (week : int)
@@ -211,9 +211,9 @@ and action (user : character) (time : time) (location : location) (week : int)
             | Some player -> player
             | None -> failwith "Unreachable")
         | _ ->
-            Printf.printf "decided to do %s for " event.name;
+            Printf.printf "decided to do %s !" event.name;
             List.fold_left
-              (fun char (skill, amount) -> update_skill amount skill char)
+              (fun char1 (skill, amount) -> update_skill amount skill char1)
               user event.skill_effect)
     | _ -> failwith "Todo"
   in

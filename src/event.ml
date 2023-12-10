@@ -51,11 +51,14 @@ let dinner =
     category = Special;
   }
 
+let fight = make_event ("Fight someone")
+  (1,45) ([]) Battle
+
 let test =
   {
     name = "Test";
     duration = (1, 30);
-    skill_effect = [ ("placeholder", 1) ];
+    skill_effect = [];
     category = Test;
   }
 
@@ -63,6 +66,6 @@ let sleep_in : event =
   {
     name = "Sleep in (1 hour)";
     duration = (1, 0);
-    skill_effect = [ ("Smartness", 0); ("Happiness", 10) ];
+    skill_effect = [ ("Intelligence", 0); ("Happiness", 10) ];
     category = Idle;
   }

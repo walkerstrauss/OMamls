@@ -47,3 +47,5 @@ val get_place_name : location -> campus * string option
 
 val same_campus_list : campus -> location list -> location list
 (** Checks the global location list for locations that are in the same campus. *)
+
+val all_locations_list : location list
