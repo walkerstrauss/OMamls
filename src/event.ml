@@ -9,10 +9,10 @@ type event = {
 
 and category =
   | Idle
-  | Travel
+  | Consume
   | Lecture
   | Discussion
-  | Party
+  | Buy
   | Meeting
   | Test
   | Special
@@ -22,10 +22,10 @@ and category =
 let category_of_string (s : string) : category =
   match s with
   | "Idle" -> Idle
-  | "Travel" -> Travel
   | "Lecture" -> Lecture
+  | "Consume" -> Consume
   | "Discussion" -> Discussion
-  | "Party" -> Party
+  | "Buy" -> Buy
   | "Meeting" -> Meeting
   | "Test" -> Test
   | "Special" -> Special
@@ -43,13 +43,9 @@ let event_to_string (ent : event) : string =
   ent.name ^ " -> (" ^ string_of_int hour ^ " hrs & " ^ string_of_int min
   ^ " mins)"
 
-let dinner = make_event "Dinner" (1, 0) [ ("placeholder", 1) ] Special
+let chicken = make_event "Eat Delicious and Sweet Chicken" 
+  (1, 0) [ ("placeholder", 1) ] Consume
 let test = make_event "Test" (1, 30) [ ("placeholder", 1) ] Test
 let fight = make_event ("Fight someone") (1,45) ([]) Battle
-let sleep_in : event =
-  {
-    name = "Sleep in";
-    duration = (1, 0);
-    skill_effect = [ ("Intelligence", 0); ("Happiness", 10) ];
-    category = Idle;
-  }
+let sleep_in = make_event 
+  "Sleep in" (1, 0) [ ("Intelligence", 0); ("Happiness", 10) ] Idle

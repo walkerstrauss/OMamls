@@ -317,7 +317,7 @@ let data_reader_tests2 =
     ( "Test items_of_data with []" >:: fun _ ->
       assert_equal [] (Data_reader.items_of_data []) );
     ( "Test events_of_data with d5" >:: fun _ ->
-      assert_equal [ Event.test; Event.dinner ] (Data_reader.events_of_data d5)
+      assert_equal [ Event.test; Event.chicken ] (Data_reader.events_of_data d5)
     );
     ( "Test events_of_data with empty list" >:: fun _ ->
       assert_equal [] (Data_reader.events_of_data []) );

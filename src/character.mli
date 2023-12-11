@@ -44,6 +44,9 @@ val rename : string -> character -> character
 (** Rename the character with an inputted name.
     Returns the same character with a different name*)
 
+val change_brb : int -> character -> character * int
+(** Changes the amount of brbs a Character has. *)
+
 val change_hp : int -> character -> character
 (** Alter the health of the character with a given int to alter by.
     Returns the character with the changed health*)

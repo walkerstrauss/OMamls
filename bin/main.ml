@@ -41,7 +41,7 @@ let () =
     | "IS" -> IS
     | _ -> CS
   in
-  let charac = create name major1 4 100 0 in
+  let charac = create name major1 4 100 100 in
   let major2 =
     match major1 with
     | CS -> "CS"

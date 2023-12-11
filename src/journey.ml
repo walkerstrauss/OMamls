@@ -158,11 +158,17 @@ and move (user : character) (time : time) (location : location) =
       in
       (user, add_time time (0, 25), new_loc)
   | 2 ->
-      let loc_of_campus = same_campus_list campus all_locations_list in
+    (let loc_of_campus = same_campus_list campus all_locations_list in
       let choice =
         read_int_rec (get_user_choice (print_location_options loc_of_campus))
-      in
-      (user, add_time time (0, 10), List.nth loc_of_campus (choice - 1))
+      in let x = List.nth loc_of_campus (choice - 1) in 
+      match x.place with 
+      | Store (_, nam, (s_hr, s_min), (e_hr, e_min)) -> (let (hr,min) = time in 
+        if((s_hr <= hr && hr < e_hr) || (s_hr = hr && s_min <= min && min <= e_min))
+          then (user, add_time time (0, 10), x) 
+        else (Printf.printf "%s is closed.\n" nam;
+          (user, add_time time (0, 10), location)))
+      | _ -> (user, add_time time (0, 10), x))
   | _ -> failwith "Todo"
 
 and action (user : character) (time : time) (location : location) (week : int)
@@ -212,6 +218,15 @@ and action (user : character) (time : time) (location : location) (week : int)
             | Some player -> change_hp (-500) player
             | _ -> failwith "Unreachable")
         | None -> failwith "Unreachable")
+    | Consume -> (
+      Printf.printf "%s gained 10 health from %s!\n" user.name event.name; 
+      change_hp 10 user)
+    | Buy -> (let item = List.nth consumables_catelog 
+      (Random.int (List.length consumables_catelog)) 
+      in let (n_user, balance) = change_brb 5 user 
+      in if (balance <= 0) 
+        then (Printf.printf "%s can't afford %s!\n" user.name item.name; user)
+        else (Printf.printf "%s purchased %s!\n" user.name item.name; add_item item n_user))
     | _ ->
         Printf.printf "%s decided to do %s!\n" user.name event.name;
         List.fold_left

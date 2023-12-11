@@ -45,7 +45,5 @@ let take_prelim (preparedness : int) (class' : class') : class' =
       in
       { class' with prelims = t; grade = total_grade }
 
-
 let courses_list: class' list = 
-[(create_class "CS1110" 3); 
-(create_class "ENGL1710" 1)]
+  [(create_class "CS1110" 3); (create_class "ENGL1710" 1)]

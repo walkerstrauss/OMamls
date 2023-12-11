@@ -114,7 +114,7 @@ let morrison_hall : location =
 let hans_bethe_house =
   {
     place = Dorm (West, "Hans Bethe House");
-    events = [ Event.dinner; Event.test ];
+    events = [ Event.chicken; Event.test ];
   }
 
 let rec same_campus_list (campus : campus) (locations : location list) :
@@ -252,7 +252,8 @@ let all_locations_list =
       (0,45)
       ([("Happiness", 5)])
       Idle);
-      Event.fight
+      Event.fight;
+      Event.chicken
     ]));
   (create_location 
     (Dorm (West, "Alice Cook")) 
@@ -267,5 +268,32 @@ let all_locations_list =
       ([("Happiness", 5)])
       Idle);
       Event.fight
+    ]));
+  (create_location 
+    (Hall (South, "CTB")) 
+    ([(make_event 
+      ("Eat a bagel")
+      (1,10)
+      ([("Happiness", 10)])
+      Consume);
+      (make_event 
+      ("Nap on the floor")
+      (0,45)
+      ([("Happiness", 5)])
+      Idle);
+      Event.fight
+    ]));
+  (create_location 
+    (Store (Central, "Cornell Store", (11,0), (17,0))) 
+    ([(make_event 
+      ("Buy an item")
+      (0,30)
+      ([])
+      Buy);
+      (make_event 
+      ("Fight the store keeper")
+      (1,45)
+      ([])
+      Battle)
     ]));
 ]

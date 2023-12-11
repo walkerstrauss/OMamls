@@ -13,10 +13,10 @@ type event = {
 (** Type of event that is happening to the character*)
 and category =
   | Idle
-  | Travel
+  | Consume
   | Lecture
   | Discussion
-  | Party
+  | Buy
   | Meeting
   | Test
   | Special
@@ -31,7 +31,7 @@ val make_event : string -> time -> (string * int) list -> category -> event
 val event_to_string : event -> string
 (** Function that turns event to string*)
 
-val dinner : event
+val chicken : event
 val sleep_in : event
 val test : event
 val fight : event

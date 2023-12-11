@@ -27,6 +27,11 @@ type character = {
 let rec abilities_list amt acc =
   match amt with 0 -> acc | _ -> abilities_list (amt - 1) (None :: acc)
 
+(** Changes the amount of brbs a Character has. *)
+let change_brb (amount : int) (user : character): character * int = 
+  let balance = user.brbs + amount in 
+  ({user with brbs = balance}, balance)
+
 (**Create the character with a given name and major*)
 let create name major ability_amt max_hp brbs =
   {
