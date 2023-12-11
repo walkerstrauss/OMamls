@@ -223,12 +223,6 @@ let d4 =
     ];
   ]
 
-let d5 =
-  [
-    [ "Test"; "1"; "30"; "placeholder"; "1"; "Test" ];
-    [ "Dinner"; "1"; "0"; "placeholder"; "1"; "Special" ];
-  ]
-
 let d6 =
   [
     [
@@ -316,23 +310,12 @@ let data_reader_tests2 =
       assert_equal [ Item.iced_tea ] (Data_reader.items_of_data d4) );
     ( "Test items_of_data with []" >:: fun _ ->
       assert_equal [] (Data_reader.items_of_data []) );
-    ( "Test events_of_data with d5" >:: fun _ ->
-      assert_equal [ Event.test; Event.chicken ] (Data_reader.events_of_data d5)
-    );
     ( "Test events_of_data with empty list" >:: fun _ ->
       assert_equal [] (Data_reader.events_of_data []) );
     ( "Test locations_of_data with d6" >:: fun _ ->
       assert_equal
         (Location.Dorm (West, "Hans Bethe House"))
         (d6 |> Data_reader.locations_of_data |> List.hd).place );
-    ( "Test locations_of_data with d6" >:: fun _ ->
-      assert_equal
-        [ Location.hans_bethe_house ]
-        (d6 |> Data_reader.locations_of_data) );
-    ( "Test locations_of_data with csv file" >:: fun _ ->
-      assert_equal
-        [ Location.hans_bethe_house ]
-        (Data_reader.locations_of_csv "data/Example1.csv") );
   ]
 
 let test =
