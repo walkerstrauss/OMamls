@@ -8,6 +8,6 @@
 
 5. Choose a name and a major according to the instructions in the terminal. 
 
-6. Use '1','2', and '3' to choose attack, items, or flee options in battle. 
+6. Use '1','2', and '3' to choose options for the game. 
 
 7. To start the game over, run 'make play' again and reinput your character's name and desired major!
